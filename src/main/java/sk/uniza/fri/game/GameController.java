@@ -9,13 +9,11 @@ import sk.uniza.fri.character.Player;
 
 public class GameController {
     private final Player player;
-    private final Array<RectangleMapObject> collisionObjects;
-    private final Array<RectangleMapObject> specialObjects;
+    private final GameScreen gameScreen;
 
-    public GameController(Player player, Array<RectangleMapObject> collisionObjects, Array<RectangleMapObject> specialObjects) {
+    public GameController(Player player, GameScreen gameScreen) {
         this.player = player;
-        this.collisionObjects = collisionObjects;
-        this.specialObjects = specialObjects;
+        this.gameScreen = gameScreen;
     }
 
     public void handleInput() {
@@ -36,11 +34,11 @@ public class GameController {
         }
     }
 
-    public void checkCollisions(float delta) {
+    public void checkCollisions(float delta, Array<RectangleMapObject> collisionObjects, Array<RectangleMapObject> specialObjects) {
         Rectangle futureX = new Rectangle(this.player.getX() + this.player.getVelocity().x * delta, this.player.getY(), this.player.getWidth(), this.player.getHeight());
         Rectangle futureY = new Rectangle(this.player.getX(), this.player.getY() + this.player.getVelocity().y * delta, this.player.getWidth(), this.player.getHeight());
 
-        for (RectangleMapObject collisionObject : this.collisionObjects) {
+        for (RectangleMapObject collisionObject : collisionObjects) {
             if (futureX.overlaps(collisionObject.getRectangle())) {
                 this.player.getVelocity().x = 0;
             }
@@ -49,12 +47,10 @@ public class GameController {
             }
         }
 
-        for (RectangleMapObject specialObject : this.specialObjects) {
-            if (futureX.overlaps(specialObject.getRectangle())) {
-                System.out.println("Special object");
-            }
-            if (futureY.overlaps(specialObject.getRectangle())) {
-                System.out.println("Special object");
+        for (RectangleMapObject specialObject : specialObjects) {
+            if (futureX.overlaps(specialObject.getRectangle()) || futureY.overlaps(specialObject.getRectangle())) {
+                String nextZone = specialObject.getName();
+                this.gameScreen.switchZone(nextZone);
             }
         }
     }

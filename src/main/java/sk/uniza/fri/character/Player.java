@@ -11,6 +11,9 @@ import sk.uniza.fri.pokemon.Pokedex;
 import sk.uniza.fri.pokemon.Pokemon;
 
 public class Player extends Actor {
+
+    private static final int WIDTH = 16;
+    private static final int HEIGHT = 24;
     private final String name;
     private final Pokedex pokedex;
     private final Inventory inventory;
@@ -27,6 +30,8 @@ public class Player extends Actor {
         this.velocity = new Vector2();
         this.speed = 150;
         this.setPosition(415, 190);
+        this.setWidth(WIDTH);
+        this.setHeight(HEIGHT);
     }
 
     @Override
@@ -37,7 +42,6 @@ public class Player extends Actor {
     @Override
     public void act(float delta) {
         super.act(delta);
-        System.out.println("x:" + this.getX() + " y:" + this.getY());
     }
 
     public Vector2 getVelocity() {

@@ -13,6 +13,7 @@ public class GameClass extends Game {
         if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
             Gdx.app.exit();
         }
+        System.out.println("FPS: " + Gdx.graphics.getFramesPerSecond());
     }
 
     @Override

@@ -23,13 +23,13 @@ public class GameScreen implements Screen {
     private final GameClass game;
     private final Stage environmentStage;
     private final Stage hudStage;
-    private final TiledMapRenderer mapRenderer;
-    private final TiledMap tiledMap;
     private final Player player;
     private final Skin skin;
     private final GameController gameController;
-    private final Array<RectangleMapObject> collisionObjects;
-    private final Array<RectangleMapObject> specialObjects;
+    private Array<RectangleMapObject> collisionObjects;
+    private Array<RectangleMapObject> specialObjects;
+    private TiledMapRenderer mapRenderer;
+    private TiledMap tiledMap;
 
     public GameScreen(GameClass game, Skin skin) {
         this.game = game;
@@ -43,17 +43,12 @@ public class GameScreen implements Screen {
         this.tiledMap = new TmxMapLoader().load("tmx/starter_town.tmx");
         this.mapRenderer = new OrthogonalTiledMapRenderer(this.tiledMap, this.environmentStage.getBatch());
 
+        this.initZone();
+
         this.player = new Player("Ash");
         this.environmentStage.addActor(this.player);
 
-
-        MapLayer collisionLayer = this.tiledMap.getLayers().get("Collision");
-        this.collisionObjects = collisionLayer.getObjects().getByType(RectangleMapObject.class);
-
-        MapLayer specialLayer = this.tiledMap.getLayers().get("Special");
-        this.specialObjects = specialLayer.getObjects().getByType(RectangleMapObject.class);
-
-        this.gameController = new GameController(this.player, this.collisionObjects, this.specialObjects);
+        this.gameController = new GameController(this.player, this);
 
         // Add HUD actors to the hudStage
         // Example:
@@ -62,8 +57,30 @@ public class GameScreen implements Screen {
         this.hudStage.addActor(inventory);
     }
 
-    @Override
-    public void show() {
+    public void initZone() {
+        if (this.collisionObjects != null) {
+            this.collisionObjects.clear();
+        } else if (this.specialObjects != null) {
+            this.specialObjects.clear();
+        }
+        MapLayer collisionLayer = this.tiledMap.getLayers().get("Collision");
+        this.collisionObjects = collisionLayer.getObjects().getByType(RectangleMapObject.class);
+
+        if (this.tiledMap.getLayers().get("Special") != null) {
+            MapLayer specialLayer = this.tiledMap.getLayers().get("Special");
+            this.specialObjects = specialLayer.getObjects().getByType(RectangleMapObject.class);
+            this.specialObjects.get(0).setName("starter_forest");
+        }
+    }
+
+    public void switchZone(String nextZone) {
+        this.tiledMap.dispose();
+
+        this.tiledMap = new TmxMapLoader().load("tmx/" + nextZone + ".tmx");
+        this.mapRenderer = new OrthogonalTiledMapRenderer(this.tiledMap, this.environmentStage.getBatch());
+
+        this.initZone();
+        this.player.setPosition(55, 462);
     }
 
     @Override
@@ -71,7 +88,7 @@ public class GameScreen implements Screen {
         ScreenUtils.clear(0, 0, 0, 1);
 
         this.gameController.handleInput();
-        this.gameController.checkCollisions(delta);
+        this.gameController.checkCollisions(delta, this.collisionObjects, this.specialObjects);
         this.player.update(delta);
         this.environmentStage.getCamera().update();
 
@@ -84,6 +101,8 @@ public class GameScreen implements Screen {
 //        this.hudStage.act(delta);
 //        this.hudStage.draw();
 
+        System.out.println("x: " + this.player.getX() + ", y: " + this.player.getY() + ", W: " + this.player.getWidth() + ", H: " + this.player.getHeight());
+
         if (Gdx.input.isKeyPressed(Input.Keys.Z)) {
             this.game.setScreen(new BattleScreen(this.game, this, this.skin));
         }
@@ -93,6 +112,12 @@ public class GameScreen implements Screen {
     public void resize(int width, int height) {
         this.environmentStage.getViewport().update(width, height, true);
         this.hudStage.getViewport().update(width, height, true);
+    }
+
+    @Override
+    public void dispose() {
+        this.environmentStage.dispose();
+        this.hudStage.dispose();
     }
 
     @Override
@@ -108,8 +133,6 @@ public class GameScreen implements Screen {
     }
 
     @Override
-    public void dispose() {
-        this.environmentStage.dispose();
-        this.hudStage.dispose();
+    public void show() {
     }
 }

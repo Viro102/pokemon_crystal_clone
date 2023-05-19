@@ -1,5 +1,6 @@
 plugins {
     `java-library`
+    application
 }
 
 group = "sk.uniza.fri"
@@ -16,6 +17,10 @@ dependencies {
     api("com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion")
     api("com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop")
     api("com.badlogicgames.gdx:gdx:$gdxVersion")
+}
+
+application {
+    mainClass.set("sk.uniza.fri.game.Main")
 }
 
 tasks.test {

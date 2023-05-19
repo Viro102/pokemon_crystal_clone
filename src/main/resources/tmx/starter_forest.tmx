@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.1" orientation="orthogonal" renderorder="right-down" width="48" height="48" tilewidth="16" tileheight="16" infinite="0" nextlayerid="9" nextobjectid="30">
+<map version="1.10" tiledversion="1.10.1" orientation="orthogonal" renderorder="right-down" width="48" height="48" tilewidth="16" tileheight="16" infinite="0" nextlayerid="10" nextobjectid="35">
  <tileset firstgid="1" source="../tsx/plains.tsx"/>
  <tileset firstgid="73" source="../tsx/decor_16x16.tsx"/>
  <tileset firstgid="93" source="../tsx/flooring.tsx"/>
@@ -22,9 +22,9 @@
   </data>
  </layer>
  <objectgroup id="7" name="Collision">
-  <object id="8" x="-0.279633" y="214.792" width="232.437" height="50.4874"/>
+  <object id="8" x="0.387034" y="219.792" width="232.437" height="47.154"/>
   <object id="9" x="351.875" y="270.697" width="188.86" height="32.0239"/>
-  <object id="10" x="-1.65633" y="319.228" width="189.357" height="33.8343"/>
+  <object id="10" x="-1.65633" y="314.894" width="189.357" height="36.501"/>
   <object id="11" x="532.922" y="421.975" width="36.1514" height="54.8505"/>
   <object id="12" x="676.281" y="327.233" width="37.398" height="50.4874"/>
   <object id="13" x="660.699" y="520.456" width="36.1514" height="49.2408"/>
@@ -35,15 +35,20 @@
   <object id="18" x="453.763" y="72.6145" width="36.1514" height="49.2408"/>
   <object id="19" x="646.363" y="71.3679" width="36.1514" height="49.2408"/>
   <object id="20" x="294.198" y="41.4495" width="36.1514" height="49.2408"/>
-  <object id="21" x="150.839" y="41.4495" width="36.1514" height="49.2408"/>
-  <object id="22" x="37.591" y="104.046" width="36.1514" height="49.2408"/>
+  <object id="21" x="149.172" y="41.4495" width="36.1514" height="49.2408"/>
+  <object id="22" x="37.591" y="104.046" width="36.1514" height="51.9075"/>
   <object id="23" x="20.591" y="680.713" width="36.1514" height="49.2408"/>
-  <object id="25" x="-48.3333" y="-34.6667" width="48.3333" height="844.667"/>
-  <object id="27" x="-49" y="762.667" width="851" height="50"/>
-  <object id="28" x="759.333" y="-38.3333" width="43.3333" height="848"/>
-  <object id="29" x="-49.3333" y="-38" width="849" height="58.3333"/>
+  <object id="25" x="-48.3333" y="-34.6667" width="50.8333" height="844.667"/>
+  <object id="27" x="-49" y="764.167" width="851" height="48.5"/>
+  <object id="28" x="763.333" y="-38.3333" width="39.3333" height="848"/>
+  <object id="29" x="-49.3333" y="-38" width="849" height="42.3333"/>
  </objectgroup>
- <objectgroup id="8" name="Special">
-  <object id="24" x="-11.3333" y="259.333" width="29.3333" height="68"/>
+ <objectgroup id="8" name="Exits">
+  <object id="24" name="starter_town" x="-11.3333" y="259.333" width="29.3333" height="68"/>
+ </objectgroup>
+ <objectgroup id="9" name="Pokemons">
+  <object id="33" name="spawn_area" x="191" y="356">
+   <polygon points="-183.5,1 -182,398 564.51,401.012 562.5,-343 -178.5,-345.5 -178.5,-153 38.5,-153 51.5,-138 466,-137 465.5,2.5"/>
+  </object>
  </objectgroup>
 </map>

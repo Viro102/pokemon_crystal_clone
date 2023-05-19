@@ -4,6 +4,7 @@ gradle
 gradlew
 gradlew.bat
 settings.gradle.kts
+.gitignore
 
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/

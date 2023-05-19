@@ -13,7 +13,7 @@ import sk.uniza.fri.pokemon.Pokemon;
 public class Player extends Actor {
 
     private static final int WIDTH = 16;
-    private static final int HEIGHT = 24;
+    private static final int HEIGHT = 16;
     private final String name;
     private final Pokedex pokedex;
     private final Inventory inventory;
@@ -24,12 +24,12 @@ public class Player extends Actor {
     public Player(String name) {
         super();
         this.name = name;
-        this.textureAtlas = new TextureAtlas("Atlas/Main.atlas");
+        this.textureAtlas = new TextureAtlas("Atlas/Trainer.atlas");
         this.pokedex = new Pokedex();
         this.inventory = new Inventory();
         this.velocity = new Vector2();
-        this.speed = 150;
-        this.setPosition(415, 190);
+        this.speed = 250;
+        this.setPosition(415, 198);
         this.setWidth(WIDTH);
         this.setHeight(HEIGHT);
     }
@@ -37,11 +37,6 @@ public class Player extends Actor {
     @Override
     public void draw(Batch batch, float parentAlpha) {
         batch.draw(this.textureAtlas.findRegion("player"), this.getX(), this.getY());
-    }
-
-    @Override
-    public void act(float delta) {
-        super.act(delta);
     }
 
     public Vector2 getVelocity() {
@@ -64,9 +59,6 @@ public class Player extends Actor {
         this.velocity.x += this.speed;
     }
 
-    public void reset() {
-        this.setPosition(415, 190);
-    }
 
     public void update(float deltaTime) {
         this.setPosition(this.getX() + this.velocity.x * deltaTime, this.getY());
@@ -99,19 +91,19 @@ public class Player extends Actor {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("Player: ");
-        sb.append(this.name);
-        sb.append(" has: ");
+        sb.append("Player: ")
+                .append(this.name)
+                .append(System.lineSeparator())
+                .append("Pokedex = [ ");
         for (Pokemon pokemon : this.pokedex) {
-            sb.append(pokemon.getName());
-            sb.append("\n");
+            sb.append(pokemon.getName()).append(", ");
         }
-        sb.append("Inventory: ");
+        sb.append(" ] ").append(System.lineSeparator());
+        sb.append("Inventory = [ ");
         for (Item item : this.inventory) {
-            sb.append(item.getName());
-            sb.append("\n");
+            sb.append(item.getName()).append(", ");
         }
-        sb.append("\n");
+        sb.append(" ] ").append(System.lineSeparator());
         return sb.toString();
     }
 }

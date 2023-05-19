@@ -11,7 +11,6 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 public class SettingsScreen implements Screen {
     private final Stage stage;
 
-
     public SettingsScreen(GameClass game, Skin skin) {
         TextButton back = new TextButton("Back", skin);
         Slider slider = new Slider(0f, 100f, 1f, false, skin);

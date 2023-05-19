@@ -19,8 +19,8 @@ public class MainMenuScreen implements Screen {
 
     public MainMenuScreen(GameClass game, Skin skin) {
         this.game = game;
-        this.table = new Table();
         this.skin = skin;
+        this.table = new Table();
 
         this.createButtons();
         this.menu = new Stage(new ScreenViewport());
@@ -43,12 +43,8 @@ public class MainMenuScreen implements Screen {
     }
 
     @Override
-    public void show() {
-    }
-
-    @Override
     public void render(float delta) {
-        ScreenUtils.clear(0, 0, 0.2f, 1);
+        ScreenUtils.clear(0.53f, 0.88f, 1, 1);
         this.menu.act(delta);
         this.menu.draw();
 
@@ -71,6 +67,12 @@ public class MainMenuScreen implements Screen {
     }
 
     @Override
+    public void dispose() {
+        this.menu.dispose();
+        this.skin.dispose();
+    }
+
+    @Override
     public void pause() {
     }
 
@@ -83,7 +85,6 @@ public class MainMenuScreen implements Screen {
     }
 
     @Override
-    public void dispose() {
-        this.menu.dispose();
+    public void show() {
     }
 }

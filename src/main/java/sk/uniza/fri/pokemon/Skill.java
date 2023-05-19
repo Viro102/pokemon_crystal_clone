@@ -10,11 +10,11 @@ public abstract class Skill {
         this.description = description;
         this.levelRequirement = levelRequirement;
     }
-    
+
     public abstract void activate();
 
     @Override
     public String toString() {
-        return "SKILL: " + this.name + " " + this.description + " LVL: " + this.levelRequirement;
+        return "Skill: " + this.name + " " + this.description + " LVL: " + this.levelRequirement;
     }
 }

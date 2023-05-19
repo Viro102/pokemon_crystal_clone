@@ -29,8 +29,17 @@ public class GameController {
         if (Gdx.input.isKeyPressed(Input.Keys.D)) {
             this.player.moveRight();
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.R)) {
-            this.player.reset();
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.X)) {
+            System.out.println("X: " + this.player.getX() + ", Y: " + this.player.getY());
+        }
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
+            if (!this.gameScreen.isPaused()) {
+                this.gameScreen.pauseGame();
+            } else {
+                this.gameScreen.resumeGame();
+            }
         }
     }
 

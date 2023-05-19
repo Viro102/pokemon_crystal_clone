@@ -31,13 +31,13 @@ public class BattleScreen implements Screen {
         this.table.setFillParent(true);
         this.stage.addActor(this.table);
 
-        TextButton attack = new TextButton("attack", this.skin);
-        TextButton inventory = new TextButton("inventory", this.skin);
-        TextButton defend = new TextButton("defend", this.skin);
+        TextButton attack = new TextButton("Fight", this.skin);
+        TextButton bag = new TextButton("Bag", this.skin);
+        TextButton switchPokemon = new TextButton("Pokémon", this.skin);
+        TextButton run = new TextButton("Run", this.skin);
 
-        this.buttonGroup = new ButtonGroup<>(attack, inventory, defend);
+        this.buttonGroup = new ButtonGroup<>(attack, bag, switchPokemon, run);
 
-        // Set table
         this.table.defaults().uniform().fill();
         this.table.bottom().right();
         for (Button button : this.buttonGroup.getButtons()) {
@@ -46,14 +46,12 @@ public class BattleScreen implements Screen {
         }
     }
 
-    @Override
-    public void show() {
-    }
 
     @Override
     public void render(float delta) {
-        ScreenUtils.clear(0, 0, .2f, 1);
-        this.stage.act(Gdx.graphics.getDeltaTime());
+        ScreenUtils.clear(0, 0, 0, 1);
+
+        this.stage.act(delta);
         this.stage.draw();
 
         for (TextButton button : this.buttonGroup.getButtons()) {
@@ -69,7 +67,15 @@ public class BattleScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
+        this.stage.getViewport().update(width, height, true);
     }
+
+    @Override
+    public void dispose() {
+        this.stage.dispose();
+        this.skin.dispose();
+    }
+
 
     @Override
     public void pause() {
@@ -84,6 +90,7 @@ public class BattleScreen implements Screen {
     }
 
     @Override
-    public void dispose() {
+    public void show() {
     }
+
 }

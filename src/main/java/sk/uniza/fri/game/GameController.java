@@ -43,7 +43,7 @@ public class GameController {
         }
     }
 
-    public void checkCollisions(float delta, Array<RectangleMapObject> collisionObjects, Array<RectangleMapObject> specialObjects) {
+    public void checkCollisions(float delta, Array<RectangleMapObject> collisionObjects, Array<RectangleMapObject> exits) {
         Rectangle futureX = new Rectangle(this.player.getX() + this.player.getVelocity().x * delta, this.player.getY(), this.player.getWidth(), this.player.getHeight());
         Rectangle futureY = new Rectangle(this.player.getX(), this.player.getY() + this.player.getVelocity().y * delta, this.player.getWidth(), this.player.getHeight());
 
@@ -56,9 +56,9 @@ public class GameController {
             }
         }
 
-        for (RectangleMapObject specialObject : specialObjects) {
-            if (futureX.overlaps(specialObject.getRectangle()) || futureY.overlaps(specialObject.getRectangle())) {
-                String nextZone = specialObject.getName();
+        for (RectangleMapObject exit : exits) {
+            if (futureX.overlaps(exit.getRectangle()) || futureY.overlaps(exit.getRectangle())) {
+                String nextZone = exit.getName();
                 this.gameScreen.switchZone(nextZone);
             }
         }

@@ -92,5 +92,4 @@ public class BattleScreen implements Screen {
     @Override
     public void show() {
     }
-
 }

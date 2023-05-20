@@ -109,7 +109,7 @@
   },
   {
     "name": "dewgong",
-    "type": "water",
+    "type": "ice",
     "baseHP": 100,
     "baseAttack": 20,
     "baseDefense": 20,
@@ -235,7 +235,7 @@
   },
   {
     "name": "cloyster",
-    "type": "water",
+    "type": "ice",
     "baseHP": 100,
     "baseAttack": 20,
     "baseDefense": 20,

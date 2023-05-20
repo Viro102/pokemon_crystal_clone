@@ -1,9 +1,9 @@
 package sk.uniza.fri.pokemon;
 
-public class AttackSkill extends Skill {
+public class AttackMove extends Move {
     private final int damage;
 
-    protected AttackSkill(String name, String description, int levelRequirement) {
+    protected AttackMove(String name, String description, int levelRequirement) {
         super(name, description, levelRequirement);
         this.damage = 5;
     }

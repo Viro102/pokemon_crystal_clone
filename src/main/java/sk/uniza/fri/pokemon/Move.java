@@ -1,11 +1,11 @@
 package sk.uniza.fri.pokemon;
 
-public abstract class Skill {
+public abstract class Move {
     private final String name;
     private final String description;
     private final int levelRequirement;
 
-    protected Skill(String name, String description, int levelRequirement) {
+    protected Move(String name, String description, int levelRequirement) {
         this.name = name;
         this.description = description;
         this.levelRequirement = levelRequirement;

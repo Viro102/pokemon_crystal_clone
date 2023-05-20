@@ -33,7 +33,7 @@ public class BattleScreen implements Screen {
 
         TextButton attack = new TextButton("Fight", this.skin);
         TextButton bag = new TextButton("Bag", this.skin);
-        TextButton switchPokemon = new TextButton("Pokémon", this.skin);
+        TextButton switchPokemon = new TextButton("Pokemon", this.skin);
         TextButton run = new TextButton("Run", this.skin);
 
         this.buttonGroup = new ButtonGroup<>(attack, bag, switchPokemon, run);
@@ -75,7 +75,6 @@ public class BattleScreen implements Screen {
         this.stage.dispose();
         this.skin.dispose();
     }
-
 
     @Override
     public void pause() {

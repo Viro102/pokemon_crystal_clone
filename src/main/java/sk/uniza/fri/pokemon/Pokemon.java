@@ -6,12 +6,13 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import sk.uniza.fri.game.Constants;
+import sk.uniza.fri.item.Effect;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 
 public abstract class Pokemon extends Actor {
-    private final ArrayList<Move> moves;
+    private final ArrayList<Ability> abilities;
     private final String evolvesInto;
     private int defense;
     private int speed;
@@ -22,6 +23,7 @@ public abstract class Pokemon extends Actor {
     private int level;
     private int experience;
     private boolean isCollected;
+    private Effect statusEffect;
 
     protected Pokemon(String name, int level, int health, int attack, int defense, int speed, String evolvesInto) {
         this.level = level;
@@ -30,7 +32,7 @@ public abstract class Pokemon extends Actor {
         this.defense = defense;
         this.speed = speed;
         this.evolvesInto = evolvesInto;
-        this.moves = new ArrayList<>();
+        this.abilities = new ArrayList<>();
         this.experience = 0;
         this.fainted = false;
         this.isCollected = false;
@@ -40,21 +42,12 @@ public abstract class Pokemon extends Actor {
     }
 
     protected Pokemon(String name, int health, int attack, int defense, int speed, String evolvesInto) {
-        this.defense = defense;
-        this.speed = speed;
-        this.attack = attack;
-        this.health = health;
-        this.evolvesInto = evolvesInto;
-        this.moves = new ArrayList<>();
-        this.level = 1;
-        this.experience = 0;
-        this.fainted = false;
-        this.isCollected = false;
-
-        this.setName(name);
-        this.initSprite();
+        this(name, 1, health, attack, defense, speed, evolvesInto);
     }
 
+    protected Pokemon(String name, int health, int attack, int defense, int speed) {
+        this(name, health, attack, defense, speed, null);
+    }
 
     public void initSprite() {
         this.textureAtlas = new TextureAtlas("Atlas/Pokemons.atlas");
@@ -64,18 +57,16 @@ public abstract class Pokemon extends Actor {
             TextureRegion textureRegion = this.textureAtlas.findRegion(this.getName());
             this.setWidth(textureRegion.getRegionWidth());
             this.setHeight(textureRegion.getRegionHeight());
+            this.setOrigin(this.getX() + this.getWidth() / 2f, this.getY() + this.getHeight() / 2f);
         }
     }
 
-    public void attack(Pokemon pokemon, AttackMove skill) {
-        pokemon.takeDamage(skill.getDamage());
+    public void attack(Pokemon pokemon, OffensiveAbility skill) {
+        pokemon.decreaseHP(skill.getDamage());
     }
 
-    public void defend(Pokemon pokemon, Move move) {
-    }
-
-    public Iterator<Move> getMoves() {
-        return this.moves.iterator();
+    public Iterator<Ability> getAbilities() {
+        return this.abilities.iterator();
     }
 
     public void gainExp(int exp) {
@@ -102,34 +93,56 @@ public abstract class Pokemon extends Actor {
         System.out.println("Pokemon " + this.getName() + " evolved!");
     }
 
-    public void takeDamage(int damage) {
-        this.health -= damage;
+    public void addAbility(Ability ability) {
+        if (!this.abilities.contains(ability)) {
+            this.abilities.add(ability);
+        }
+    }
+
+    public void increaseHP(int hp) {
+        this.health += hp;
+    }
+
+    public void increaseATT(int attack) {
+        this.attack += attack;
+    }
+
+    public void increaseDEF(int defense) {
+        this.defense += defense;
+    }
+
+    public void increaseSPD(int speed) {
+        this.speed += speed;
+    }
+
+    public void decreaseHP(int hp) {
+        this.health -= hp;
         if (this.health <= 0) {
             this.fainted = true;
         }
     }
 
-    public void addSkill(Move move) {
-        if (!this.moves.contains(move)) {
-            this.moves.add(move);
-        }
+    public void decreaseATT(int attack) {
+        this.attack -= attack;
+    }
+
+    public void decreaseDEF(int defense) {
+        this.defense -= defense;
+    }
+
+    public void decreaseSPD(int speed) {
+        this.speed -= speed;
     }
 
     public int getAttack() {
         return this.attack;
     }
 
-    public void setAttack(int attack) {
-        this.attack = attack;
-    }
 
     public int getHealth() {
         return this.health;
     }
 
-    public void setHealth(int health) {
-        this.health = health;
-    }
 
     public boolean hasFainted() {
         return this.fainted;
@@ -139,17 +152,11 @@ public abstract class Pokemon extends Actor {
         return this.defense;
     }
 
-    public void setDefense(int defense) {
-        this.defense = defense;
-    }
 
     public int getSpeed() {
         return this.speed;
     }
 
-    public void setSpeed(int speed) {
-        this.speed = speed;
-    }
 
     public int getPowerPoints() {
         int powerPoints = 0;
@@ -165,18 +172,44 @@ public abstract class Pokemon extends Actor {
         this.isCollected = collected;
     }
 
+    public int[] getStats() {
+        int[] stats = new int[5];
+        stats[0] = this.level;
+        stats[1] = this.health;
+        stats[2] = this.attack;
+        stats[3] = this.defense;
+        stats[4] = this.speed;
+        return stats;
+    }
+
+    public void setStats(int[] pokemonStats) {
+        if (pokemonStats.length != 5) {
+            throw new IllegalArgumentException("Pokemon stats must be 5!");
+        }
+        this.level = pokemonStats[0];
+        this.health = pokemonStats[1];
+        this.attack = pokemonStats[2];
+        this.defense = pokemonStats[3];
+        this.speed = pokemonStats[4];
+    }
+
+    public void setStatusEffect(Effect effect) {
+        this.statusEffect = effect;
+    }
+
     @Override
     public void draw(Batch batch, float parentAlpha) {
-        batch.draw(this.textureAtlas.findRegion(this.getName()), this.getX(), this.getY());
+        batch.draw(this.textureAtlas.findRegion(this.getName()), this.getX(), this.getY(), this.getOriginX(), this.getOriginY(), this.getWidth(), this.getHeight(), this.getScaleX(), this.getScaleY(), this.getRotation());
 
         if (Constants.DEBUG) {
             BitmapFont font = new BitmapFont();
             String stats = "NAME: " + this.getName()
+                    + "\n"
                     + " LVL: " + this.getLevel()
                     + " HP: " + this.getHealth()
                     + " ATK: " + this.getAttack()
                     + " DEF: " + this.getDefense();
-            font.draw(batch, stats, this.getX() + this.getWidth() / 2, this.getY() + this.getHeight());
+            font.draw(batch, stats, this.getX(), this.getY() + this.getHeight());
         }
     }
 
@@ -189,22 +222,11 @@ public abstract class Pokemon extends Actor {
                 .append(" ATT: ")
                 .append(this.attack)
                 .append(System.lineSeparator());
-        for (Move move : this.moves) {
-            sb.append(move)
+        for (Ability ability : this.abilities) {
+            sb.append(ability)
                     .append(System.lineSeparator());
         }
 
         return sb.toString();
-    }
-
-    public void setStats(int[] pokemonStats) {
-        if (pokemonStats.length != 5) {
-            throw new IllegalArgumentException("Pokemon stats must be 5!");
-        }
-        this.level = pokemonStats[0];
-        this.health = pokemonStats[1];
-        this.attack = pokemonStats[2];
-        this.defense = pokemonStats[3];
-        this.speed = pokemonStats[4];
     }
 }

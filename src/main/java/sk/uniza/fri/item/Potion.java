@@ -1,6 +1,5 @@
 package sk.uniza.fri.item;
 
-import sk.uniza.fri.character.Player;
 import sk.uniza.fri.pokemon.Pokemon;
 
 public class Potion implements UsableItem {
@@ -25,9 +24,23 @@ public class Potion implements UsableItem {
     }
 
     @Override
-    public void use(Player player, Pokemon pokemon) {
-        if (this.effect == Effect.BUFF_ATTACK) {
-            pokemon.setAttack(this.effect.getAmount());
+    public void use(Pokemon pokemon) {
+        switch (this.effect) {
+            case HEAL: {
+                pokemon.increaseHP(this.effect.getAmount());
+                break;
+            }
+            case BUFF_DEFENSE: {
+                pokemon.increaseDEF(this.effect.getAmount());
+                break;
+            }
+            case BUFF_ATTACK: {
+                pokemon.increaseATT(this.effect.getAmount());
+                break;
+            }
+            default: {
+                break;
+            }
         }
     }
 }

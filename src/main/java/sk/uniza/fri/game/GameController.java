@@ -6,6 +6,9 @@ import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Array;
 import sk.uniza.fri.character.Player;
+import sk.uniza.fri.pokemon.Pokemon;
+
+import java.util.Map;
 
 public class GameController {
     private final Player player;
@@ -43,16 +46,19 @@ public class GameController {
         }
     }
 
-    public void checkCollisions(float delta, Array<RectangleMapObject> collisionObjects, Array<RectangleMapObject> exits) {
+    public void checkCollisions(float delta, Array<RectangleMapObject> collisionObjects, Array<RectangleMapObject> exits, Map<Pokemon, Rectangle> pokemons) {
         Rectangle futureX = new Rectangle(this.player.getX() + this.player.getVelocity().x * delta, this.player.getY(), this.player.getWidth(), this.player.getHeight());
         Rectangle futureY = new Rectangle(this.player.getX(), this.player.getY() + this.player.getVelocity().y * delta, this.player.getWidth(), this.player.getHeight());
+        Rectangle current = new Rectangle(this.player.getX(), this.player.getY(), this.player.getWidth(), this.player.getHeight());
 
         for (RectangleMapObject collisionObject : collisionObjects) {
             if (futureX.overlaps(collisionObject.getRectangle())) {
                 this.player.getVelocity().x = 0;
+                return;
             }
             if (futureY.overlaps(collisionObject.getRectangle())) {
                 this.player.getVelocity().y = 0;
+                return;
             }
         }
 
@@ -60,6 +66,14 @@ public class GameController {
             if (futureX.overlaps(exit.getRectangle()) || futureY.overlaps(exit.getRectangle())) {
                 String nextZone = exit.getName();
                 this.gameScreen.switchZone(nextZone);
+                return;
+            }
+        }
+
+        for (Map.Entry<Pokemon, Rectangle> pokemon : pokemons.entrySet()) {
+            if (current.overlaps(pokemon.getValue())) {
+                this.gameScreen.startBattle(pokemon.getKey());
+                return;
             }
         }
     }

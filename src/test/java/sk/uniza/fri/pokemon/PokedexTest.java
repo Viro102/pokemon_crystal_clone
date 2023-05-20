@@ -7,6 +7,6 @@ class PokedexTest {
     @Test
     void testConstructor() {
         Pokedex pokedex = new Pokedex();
-        Assertions.assertEquals(24, pokedex.getSize());
+        Assertions.assertEquals(29, pokedex.getSize());
     }
 }

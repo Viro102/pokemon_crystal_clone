@@ -6,12 +6,16 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import sk.uniza.fri.character.Player;
 import sk.uniza.fri.pokemon.Pokedex;
 import sk.uniza.fri.pokemon.Pokemon;
 
-public class Map {
+import java.util.HashMap;
+import java.util.Map;
+
+public class Zone {
     private final TiledMap tiledMap;
     private final String mapName;
     private final Array<RectangleMapObject> collisionObjects;
@@ -19,7 +23,7 @@ public class Map {
     private final Array<RectangleMapObject> pokemonSpawnAreas;
     private final Array<Pokemon> pokemons;
 
-    public Map(String mapName, Player player, Pokedex pokedex) {
+    public Zone(String mapName, Player player, Pokedex pokedex) {
         this.mapName = mapName;
         this.tiledMap = new TmxMapLoader().load("tmx/" + this.mapName + ".tmx");
         this.pokemons = new Array<>();
@@ -33,37 +37,60 @@ public class Map {
         if (this.tiledMap.getLayers().get("Pokemons") != null) {
             MapLayer pokemonLayer = this.tiledMap.getLayers().get("Pokemons");
             this.pokemonSpawnAreas = pokemonLayer.getObjects().getByType(RectangleMapObject.class);
-            this.generatePokemons(player, pokedex);
+            this.spawnPokemons(player, pokedex);
         } else {
             this.pokemonSpawnAreas = new Array<>();
         }
     }
 
-    private void generatePokemons(Player player, Pokedex pokedex) {
+    private void spawnPokemons(Player player, Pokedex pokedex) {
+        Array<Vector2> spawnPoints = new Array<>();
+
         for (RectangleMapObject area : this.pokemonSpawnAreas) {
             Rectangle rectangle = area.getRectangle();
+
             for (int i = 0; i < 10; i++) {
                 float x = MathUtils.random(rectangle.getX(), rectangle.getX() + rectangle.getWidth());
                 float y = MathUtils.random(rectangle.getY(), rectangle.getY() + rectangle.getHeight());
+
                 Pokemon pokemon = this.randomizePokemonStats(player, pokedex);
-                pokemon.setPosition(x, y);
-                this.pokemons.add(pokemon);
+                x += pokemon.getWidth() / 2;
+                y += pokemon.getHeight() / 2;
+
+                Vector2 spawnPoint = new Vector2(x, y);
+
+                if (this.isFarEnough(spawnPoint, spawnPoints)) {
+                    pokemon.setPosition(x, y);
+                    spawnPoints.add(spawnPoint);
+                    this.pokemons.add(pokemon);
+                }
             }
         }
     }
 
+    private boolean isFarEnough(Vector2 spawnPoint, Array<Vector2> spawnPoints) {
+        for (Vector2 point : spawnPoints) {
+            if (spawnPoint.dst(point) < 120) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+
     private Pokemon randomizePokemonStats(Player player, Pokedex pokedex) {
-        int[] pokemonStats = new int[5];
         int playerPartyPower = player.getPartyStrength();
         Pokemon pokemon = pokedex.getRandomPokemon();
+        int[] pokemonStats = pokemon.getStats();
+
 
         // first stat is always level
         for (int i = 0; i < pokemonStats.length; i++) {
             if (i == 0) {
-                pokemonStats[i] = Math.abs(MathUtils.random(player.getMaxLvlOfParty() - 2, player.getMaxLvlOfParty() + 2));
+                pokemonStats[i] += MathUtils.random(player.getMaxLvlOfParty(), player.getMaxLvlOfParty() + 2);
                 continue;
             }
-            pokemonStats[i] = Math.abs(MathUtils.random(playerPartyPower - 2, playerPartyPower + 2));
+            pokemonStats[i] += MathUtils.random(playerPartyPower / 5 - 2, playerPartyPower / 5 + 2);
         }
         pokemon.setStats(pokemonStats);
 
@@ -82,8 +109,14 @@ public class Map {
         return this.exitHitboxes;
     }
 
-    public Array<Pokemon> getPokemons() {
-        return this.pokemons;
+    public Map<Pokemon, Rectangle> getPokemons() {
+        HashMap<Pokemon, Rectangle> pokemonHitbox = new HashMap<>();
+
+        for (Pokemon pokemon : this.pokemons) {
+            pokemonHitbox.put(pokemon, new Rectangle(pokemon.getX(), pokemon.getY(), pokemon.getWidth(), pokemon.getHeight()));
+        }
+
+        return pokemonHitbox;
     }
 
     public String getMapName() {

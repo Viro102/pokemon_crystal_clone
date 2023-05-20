@@ -4,8 +4,10 @@ import com.badlogic.gdx.utils.Null;
 import sk.uniza.fri.pokemon.Pokemon;
 
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Iterator;
 
-public class Party {
+public class Party implements Iterable<Pokemon> {
     private static final int MAX_PARTY_SIZE = 6;
     private final ArrayList<Pokemon> pokemons;
     private int powerPoints;
@@ -23,6 +25,8 @@ public class Party {
         this.pokemons.add(pokemon);
         this.size++;
         this.powerPoints += pokemon.getPowerPoints();
+
+        this.pokemons.sort(Comparator.comparingInt(Pokemon::getSpeed).reversed());
     }
 
     public int getMaxLevel() {
@@ -63,5 +67,19 @@ public class Party {
             }
         }
         return null;
+    }
+
+    @Override
+    public Iterator<Pokemon> iterator() {
+        return this.pokemons.iterator();
+    }
+
+    @Null
+    public Pokemon getFirstPokemon() {
+        if (this.pokemons.isEmpty()) {
+            return null;
+        } else {
+            return this.pokemons.get(0);
+        }
     }
 }

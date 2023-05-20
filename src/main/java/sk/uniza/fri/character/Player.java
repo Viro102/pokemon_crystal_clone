@@ -100,11 +100,23 @@ public class Player extends Actor {
     }
 
     public void useItem(UsableItem item, String pokemon) {
-        item.use(this, this.party.getPokemon(pokemon));
+        item.use(this.party.getPokemon(pokemon));
     }
 
     public void collectPokemon(Pokemon pokemon) {
         this.pokedex.getPokemon(pokemon.getName()).setCollected(true);
+    }
+
+    public Pokemon getFirstPokemon() {
+        return this.party.getFirstPokemon();
+    }
+
+    public int getGold() {
+        return this.gold;
+    }
+
+    public Iterable<Pokemon> getParty() {
+        return this.party;
     }
 
     @Override

@@ -64,10 +64,11 @@ public class Pokedex implements Iterable<Pokemon> {
                 }
                 default: {
                     System.out.println("Unknown type: " + type);
+                    break;
                 }
             }
         }
-        
+
         System.out.println("Loaded " + this.pokemons.size() + " pokemons");
         this.pokemonNames = this.pokemons.keySet().toArray(new String[0]);
     }

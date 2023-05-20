@@ -47,7 +47,7 @@
   <object id="24" name="starter_town" x="-11.3333" y="259.333" width="29.3333" height="68"/>
  </objectgroup>
  <objectgroup id="9" name="Pokemons">
-  <object id="35" name="spawn_area2" x="28.6667" y="362.667" width="705.333" height="358.667"/>
-  <object id="36" name="spawn_area" x="21.3333" y="22" width="707.333" height="176.667"/>
+  <object id="35" name="spawn_area2" x="61.3334" y="402.667" width="654" height="278.667"/>
+  <object id="36" name="spawn_area" x="76" y="22" width="627.333" height="172.667"/>
  </objectgroup>
 </map>

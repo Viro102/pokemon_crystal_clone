@@ -9,14 +9,15 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import sk.uniza.fri.character.Player;
-import sk.uniza.fri.pokemon.Pokedex;
+import sk.uniza.fri.pokemon.*;
 
 public class MainMenuScreen implements Screen {
     private final GameClass game;
-    private final Stage menu;
-    private final Table table;
     private final Skin skin;
     private final Pokedex pokedex;
+    private final SettingsScreen settingsScreen;
+    private final Stage menu;
+    private final Table table;
     private ButtonGroup<TextButton> buttons;
     private boolean isPlayClicked;
 
@@ -25,12 +26,14 @@ public class MainMenuScreen implements Screen {
         this.skin = skin;
         this.pokedex = pokedex;
         this.isPlayClicked = false;
-        this.table = new Table();
+        this.settingsScreen = new SettingsScreen(this.game, this.skin, this);
 
+        this.table = new Table();
         this.createButtons();
         this.menu = new Stage(new ScreenViewport());
-        Gdx.input.setInputProcessor(this.menu);
         this.menu.addActor(this.table);
+
+        Gdx.input.setInputProcessor(this.menu);
     }
 
     private void createButtons() {
@@ -48,7 +51,7 @@ public class MainMenuScreen implements Screen {
     }
 
     private void createEnterNameDialog() {
-        Label welcomeLabel = new Label("Hello welcome to world of Johto!, please enter your name: ", this.skin);
+        Label welcomeLabel = new Label("Hello, welcome to the world of Johto\n, please enter your name: ", this.skin);
 
         this.table.add(welcomeLabel);
         this.table.row().uniform();
@@ -63,7 +66,8 @@ public class MainMenuScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 Player player = new Player(nameField.getText(), MainMenuScreen.this.pokedex);
-                MainMenuScreen.this.game.setScreen(new GameScreen(MainMenuScreen.this.game, MainMenuScreen.this.skin, player, MainMenuScreen.this.pokedex));
+                player.addPokemonToParty(new WaterPokemon("totodile", 100, 10, 10, 10));
+                MainMenuScreen.this.game.setScreen(new GameScreen(MainMenuScreen.this.game, MainMenuScreen.this.skin, player, MainMenuScreen.this.pokedex, MainMenuScreen.this.settingsScreen));
             }
         });
         this.table.add(continueButton).width(200);
@@ -72,21 +76,19 @@ public class MainMenuScreen implements Screen {
     @Override
     public void render(float delta) {
         ScreenUtils.clear(0.53f, 0.88f, 1, 1);
+        this.menu.getViewport().apply();
         this.menu.act(delta);
         this.menu.draw();
 
         // 0 - play, 1 - settings, 2 - exit
         if (!this.isPlayClicked) {
             if (this.buttons.getButtons().get(0).isPressed()) {
-                if (Constants.DEBUG) {
-                    this.game.setScreen(new GameScreen(this.game, this.skin, new Player("Player", this.pokedex), this.pokedex));
-                }
                 this.isPlayClicked = true;
                 this.buttons.clear();
                 this.table.clear();
                 this.createEnterNameDialog();
             } else if (this.buttons.getButtons().get(1).isPressed()) {
-                this.game.setScreen(new SettingsScreen(this.game, this.skin));
+                this.game.setScreen(new SettingsScreen(this.game, this.skin, this));
             } else if (this.buttons.getButtons().get(2).isPressed()) {
                 Gdx.app.exit();
             }
@@ -118,5 +120,6 @@ public class MainMenuScreen implements Screen {
 
     @Override
     public void show() {
+        Gdx.input.setInputProcessor(this.menu);
     }
 }

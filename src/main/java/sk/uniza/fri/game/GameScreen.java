@@ -22,6 +22,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import sk.uniza.fri.character.Player;
 import sk.uniza.fri.pokemon.Pokedex;
+import sk.uniza.fri.pokemon.Pokemon;
 
 public class GameScreen implements Screen {
     private final GameClass game;
@@ -30,20 +31,22 @@ public class GameScreen implements Screen {
     private final Pokedex pokedex;
     private final Skin skin;
     private final GameController gameController;
+    private final SettingsScreen settingsScreen;
     private Stage pauseStage;
     private boolean isPaused;
-    private Map map;
+    private Zone zone;
     private String currentZone;
     private Array<RectangleMapObject> collisionObjects;
     private Array<RectangleMapObject> exitHitboxes;
     private Array<RectangleMapObject> pokemonSpawnAreas;
     private TiledMapRenderer mapRenderer;
 
-    public GameScreen(GameClass game, Skin skin, Player player, Pokedex pokedex) {
+    public GameScreen(GameClass game, Skin skin, Player player, Pokedex pokedex, SettingsScreen settingsScreen) {
         this.game = game;
         this.skin = skin;
         this.player = player;
         this.pokedex = pokedex;
+        this.settingsScreen = settingsScreen;
         this.gameController = new GameController(this.player, this);
         this.environmentStage = new Stage(new FitViewport(Constants.MAP_SIZE, Constants.MAP_SIZE));
 
@@ -51,11 +54,11 @@ public class GameScreen implements Screen {
         this.environmentStage.getCamera().update();
         this.environmentStage.addActor(this.player);
 
-        this.map = new Map("starter_town", this.player, this.pokedex);
+        this.zone = new Zone("starter_town", this.player, this.pokedex);
 
-        this.currentZone = this.map.getMapName();
+        this.currentZone = this.zone.getMapName();
 
-        this.mapRenderer = new OrthogonalTiledMapRenderer(this.map.getTiledMap(), this.environmentStage.getBatch());
+        this.mapRenderer = new OrthogonalTiledMapRenderer(this.zone.getTiledMap(), this.environmentStage.getBatch());
 
         this.initZone();
     }
@@ -71,25 +74,25 @@ public class GameScreen implements Screen {
             this.pokemonSpawnAreas.clear();
         }
 
-        this.collisionObjects = this.map.getCollisionObjects();
-        this.pokemonSpawnAreas = this.map.getPokemonSpawnAreas();
-        this.exitHitboxes = this.map.getExitHitboxes();
+        this.collisionObjects = this.zone.getCollisionObjects();
+        this.pokemonSpawnAreas = this.zone.getPokemonSpawnAreas();
+        this.exitHitboxes = this.zone.getExitHitboxes();
     }
 
     public void switchZone(String nextZone) {
-        this.map.getTiledMap().dispose();
+        this.zone.getTiledMap().dispose();
         this.environmentStage.clear();
         this.environmentStage.addActor(this.player);
 
         String prevZone = this.currentZone;
         this.currentZone = nextZone;
 
-        this.map = new Map(nextZone, this.player, this.pokedex);
-        this.mapRenderer = new OrthogonalTiledMapRenderer(this.map.getTiledMap(), this.environmentStage.getBatch());
+        this.zone = new Zone(nextZone, this.player, this.pokedex);
+        this.mapRenderer = new OrthogonalTiledMapRenderer(this.zone.getTiledMap(), this.environmentStage.getBatch());
 
         this.initZone();
 
-        this.map.getPokemons().forEach(this.environmentStage::addActor);
+        this.zone.getPokemons().keySet().forEach(this.environmentStage::addActor);
 
         if (this.currentZone.equals("starter_forest") && prevZone.equals("starter_town")) {
             this.player.setPosition(55, 462);
@@ -152,7 +155,7 @@ public class GameScreen implements Screen {
         optionsButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                GameScreen.this.game.setScreen(new SettingsScreen(GameScreen.this.game, GameScreen.this.skin));
+                GameScreen.this.game.setScreen(GameScreen.this.settingsScreen);
             }
         });
 
@@ -162,6 +165,7 @@ public class GameScreen implements Screen {
                 Gdx.app.exit();
             }
         });
+
         ButtonGroup<TextButton> buttonGroup = new ButtonGroup<>(pokedexButton, pokemonButton, bagButton, playerButton, saveButton, optionsButton, exitButton);
 
         for (TextButton button : buttonGroup.getButtons()) {
@@ -183,12 +187,16 @@ public class GameScreen implements Screen {
         return this.isPaused;
     }
 
+    public void startBattle(Pokemon enemyPokemon) {
+        this.game.setScreen(new BattleScreen(this.game, this, this.skin, this.player, enemyPokemon));
+    }
+
     @Override
     public void render(float delta) {
         ScreenUtils.clear(0, 0, 0, 1);
 
         this.gameController.handleInput();
-        this.gameController.checkCollisions(delta, this.collisionObjects, this.exitHitboxes);
+        this.gameController.checkCollisions(delta, this.collisionObjects, this.exitHitboxes, this.zone.getPokemons());
 
         this.player.update(delta);
 
@@ -207,8 +215,8 @@ public class GameScreen implements Screen {
             this.pauseStage.draw();
         }
 
-        if (Gdx.input.isKeyPressed(Input.Keys.Z)) {
-            this.game.setScreen(new BattleScreen(this.game, this, this.skin));
+        if (Constants.DEBUG && Gdx.input.isKeyPressed(Input.Keys.Z)) {
+            this.game.setScreen(new BattleScreen(this.game, this, this.skin, this.player, this.pokedex.getPokemon("bulbasaur")));
         }
     }
 
@@ -240,6 +248,6 @@ public class GameScreen implements Screen {
 
     @Override
     public void show() {
-        // unused
+        Gdx.input.setInputProcessor(this.environmentStage);
     }
 }

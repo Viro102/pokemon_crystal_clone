@@ -2,13 +2,13 @@ package sk.uniza.fri.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.ButtonGroup;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import sk.uniza.fri.character.Player;
 
 public class MainMenuScreen implements Screen {
     private final GameClass game;
@@ -16,10 +16,12 @@ public class MainMenuScreen implements Screen {
     private final Table table;
     private final Skin skin;
     private ButtonGroup<TextButton> buttons;
+    private boolean isPlayClicked;
 
     public MainMenuScreen(GameClass game, Skin skin) {
         this.game = game;
         this.skin = skin;
+        this.isPlayClicked = false;
         this.table = new Table();
 
         this.createButtons();
@@ -37,9 +39,31 @@ public class MainMenuScreen implements Screen {
         this.buttons = new ButtonGroup<>(playButton, settingsButton, exitButton);
 
         for (TextButton button : this.buttons.getButtons()) {
-            this.table.row();
-            this.table.add(button).width(190);
+            this.table.add(button).width(200);
+            this.table.row().uniform();
         }
+    }
+
+    private void createEnterNameDialog() {
+        Label welcomeLabel = new Label("Hello welcome to world of Johto!, please enter your name: ", this.skin);
+
+        this.table.add(welcomeLabel);
+        this.table.row().uniform();
+
+        TextField nameField = new TextField("", this.skin);
+        nameField.setMessageText("Enter your name");
+        this.table.add(nameField).width(200);
+        this.table.row().uniform();
+
+        TextButton continueButton = new TextButton("Continue", this.skin);
+        continueButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                Player player = new Player(nameField.getText());
+                MainMenuScreen.this.game.setScreen(new GameScreen(MainMenuScreen.this.game, MainMenuScreen.this.skin, player));
+            }
+        });
+        this.table.add(continueButton).width(200);
     }
 
     @Override
@@ -49,15 +73,20 @@ public class MainMenuScreen implements Screen {
         this.menu.draw();
 
         // 0 - play, 1 - settings, 2 - exit
-        if (this.buttons.getButtons().get(0).isPressed()) {
-            this.game.setScreen(new GameScreen(this.game, this.skin));
-        }
-        if (this.buttons.getButtons().get(1).isPressed()) {
-            this.game.setScreen(new SettingsScreen(this.game, this.skin));
-        }
-        if (this.buttons.getButtons().get(2).isPressed()) {
-            Gdx.app.log("INFO", "exiting...");
-            Gdx.app.exit();
+        if (!this.isPlayClicked) {
+            if (this.buttons.getButtons().get(0).isPressed()) {
+                if (Constants.DEBUG) {
+                    this.game.setScreen(new GameScreen(this.game, this.skin, new Player("Player")));
+                }
+                this.isPlayClicked = true;
+                this.buttons.clear();
+                this.table.clear();
+                this.createEnterNameDialog();
+            } else if (this.buttons.getButtons().get(1).isPressed()) {
+                this.game.setScreen(new SettingsScreen(this.game, this.skin));
+            } else if (this.buttons.getButtons().get(2).isPressed()) {
+                Gdx.app.exit();
+            }
         }
     }
 

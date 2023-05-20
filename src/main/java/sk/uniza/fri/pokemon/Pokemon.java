@@ -11,7 +11,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 public abstract class Pokemon extends Actor {
-    private final ArrayList<Skill> skills;
+    private final ArrayList<Move> moves;
+    private final String evolvesInto;
     private int defense;
     private int speed;
     private TextureAtlas textureAtlas;
@@ -20,47 +21,38 @@ public abstract class Pokemon extends Actor {
     private boolean fainted;
     private int level;
     private int experience;
+    private boolean isCollected;
 
-    protected Pokemon(String name, int level, int health, int attack, int defense, int speed) {
+    protected Pokemon(String name, int level, int health, int attack, int defense, int speed, String evolvesInto) {
         this.level = level;
         this.health = health;
         this.attack = attack;
         this.defense = defense;
         this.speed = speed;
-        this.skills = new ArrayList<>();
+        this.evolvesInto = evolvesInto;
+        this.moves = new ArrayList<>();
         this.experience = 0;
         this.fainted = false;
+        this.isCollected = false;
 
-        this.initSprite();
         this.setName(name);
+        this.initSprite();
     }
 
-    protected Pokemon(String name, int level, int health, int attack, int defense, int speed, ArrayList<Skill> skills) {
-        this.level = level;
-        this.health = health;
-        this.attack = attack;
-        this.defense = defense;
-        this.speed = speed;
-        this.skills = skills;
-        this.experience = 0;
-        this.fainted = false;
-
-        this.initSprite();
-        this.setName(name);
-    }
-
-    protected Pokemon(String name, int health, int attack, int defense, int speed) {
+    protected Pokemon(String name, int health, int attack, int defense, int speed, String evolvesInto) {
         this.defense = defense;
         this.speed = speed;
         this.attack = attack;
         this.health = health;
-        this.skills = new ArrayList<>();
+        this.evolvesInto = evolvesInto;
+        this.moves = new ArrayList<>();
         this.level = 1;
         this.experience = 0;
         this.fainted = false;
+        this.isCollected = false;
 
-        this.initSprite();
         this.setName(name);
+        this.initSprite();
     }
 
 
@@ -75,15 +67,15 @@ public abstract class Pokemon extends Actor {
         }
     }
 
-    public void attack(Pokemon pokemon, AttackSkill skill) {
+    public void attack(Pokemon pokemon, AttackMove skill) {
         pokemon.takeDamage(skill.getDamage());
     }
 
-    public void defend(Pokemon pokemon, Skill skill) {
+    public void defend(Pokemon pokemon, Move move) {
     }
 
-    public Iterator<Skill> getSkills() {
-        return this.skills.iterator();
+    public Iterator<Move> getMoves() {
+        return this.moves.iterator();
     }
 
     public void gainExp(int exp) {
@@ -117,9 +109,9 @@ public abstract class Pokemon extends Actor {
         }
     }
 
-    public void addSkill(Skill skill) {
-        if (!this.skills.contains(skill)) {
-            this.skills.add(skill);
+    public void addSkill(Move move) {
+        if (!this.moves.contains(move)) {
+            this.moves.add(move);
         }
     }
 
@@ -147,8 +139,30 @@ public abstract class Pokemon extends Actor {
         return this.defense;
     }
 
+    public void setDefense(int defense) {
+        this.defense = defense;
+    }
+
     public int getSpeed() {
         return this.speed;
+    }
+
+    public void setSpeed(int speed) {
+        this.speed = speed;
+    }
+
+    public int getPowerPoints() {
+        int powerPoints = 0;
+        powerPoints += 1 / 5f * this.health;
+        powerPoints += 1 / 5f * this.attack;
+        powerPoints += 1 / 5f * this.defense;
+        powerPoints += 1 / 5f * this.speed;
+        powerPoints += this.level;
+        return powerPoints;
+    }
+
+    public void setCollected(boolean collected) {
+        this.isCollected = collected;
     }
 
     @Override
@@ -175,21 +189,22 @@ public abstract class Pokemon extends Actor {
                 .append(" ATT: ")
                 .append(this.attack)
                 .append(System.lineSeparator());
-        for (Skill skill : this.skills) {
-            sb.append(skill)
+        for (Move move : this.moves) {
+            sb.append(move)
                     .append(System.lineSeparator());
         }
 
         return sb.toString();
     }
 
-    public int getPowerPoints() {
-        int powerPoints = 0;
-        powerPoints += 1 / 5f * this.health;
-        powerPoints += 1 / 5f * this.attack;
-        powerPoints += 1 / 5f * this.defense;
-        powerPoints += 1 / 5f * this.speed;
-        powerPoints += this.level;
-        return powerPoints;
+    public void setStats(int[] pokemonStats) {
+        if (pokemonStats.length != 5) {
+            throw new IllegalArgumentException("Pokemon stats must be 5!");
+        }
+        this.level = pokemonStats[0];
+        this.health = pokemonStats[1];
+        this.attack = pokemonStats[2];
+        this.defense = pokemonStats[3];
+        this.speed = pokemonStats[4];
     }
 }

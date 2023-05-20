@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.maps.objects.PolygonMapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
@@ -22,11 +21,13 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import sk.uniza.fri.character.Player;
+import sk.uniza.fri.pokemon.Pokedex;
 
 public class GameScreen implements Screen {
     private final GameClass game;
     private final Stage environmentStage;
     private final Player player;
+    private final Pokedex pokedex;
     private final Skin skin;
     private final GameController gameController;
     private Stage pauseStage;
@@ -35,13 +36,14 @@ public class GameScreen implements Screen {
     private String currentZone;
     private Array<RectangleMapObject> collisionObjects;
     private Array<RectangleMapObject> exitHitboxes;
-    private Array<PolygonMapObject> pokemonSpawnAreas;
+    private Array<RectangleMapObject> pokemonSpawnAreas;
     private TiledMapRenderer mapRenderer;
 
-    public GameScreen(GameClass game, Skin skin, Player player) {
+    public GameScreen(GameClass game, Skin skin, Player player, Pokedex pokedex) {
         this.game = game;
         this.skin = skin;
         this.player = player;
+        this.pokedex = pokedex;
         this.gameController = new GameController(this.player, this);
         this.environmentStage = new Stage(new FitViewport(Constants.MAP_SIZE, Constants.MAP_SIZE));
 
@@ -49,7 +51,7 @@ public class GameScreen implements Screen {
         this.environmentStage.getCamera().update();
         this.environmentStage.addActor(this.player);
 
-        this.map = new Map("starter_town", this.player);
+        this.map = new Map("starter_town", this.player, this.pokedex);
 
         this.currentZone = this.map.getMapName();
 
@@ -76,11 +78,13 @@ public class GameScreen implements Screen {
 
     public void switchZone(String nextZone) {
         this.map.getTiledMap().dispose();
+        this.environmentStage.clear();
+        this.environmentStage.addActor(this.player);
 
         String prevZone = this.currentZone;
         this.currentZone = nextZone;
 
-        this.map = new Map(nextZone, this.player);
+        this.map = new Map(nextZone, this.player, this.pokedex);
         this.mapRenderer = new OrthogonalTiledMapRenderer(this.map.getTiledMap(), this.environmentStage.getBatch());
 
         this.initZone();

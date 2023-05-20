@@ -13,20 +13,22 @@ import sk.uniza.fri.pokemon.Pokemon;
 
 public class Player extends Actor {
     private final Party party;
-    private final Pokedex pokedex;
     private final Inventory inventory;
     private final Vector2 velocity;
+    private final Pokedex pokedex;
     private final float speed;
     private final TextureAtlas textureAtlas;
+    private final int gold;
 
-    public Player(String name) {
+    public Player(String name, Pokedex pokedex) {
         super();
+        this.pokedex = pokedex;
         this.textureAtlas = new TextureAtlas("Atlas/Trainer.atlas");
-        this.pokedex = new Pokedex();
         this.inventory = new Inventory();
         this.party = new Party();
         this.velocity = new Vector2();
         this.speed = 250;
+        this.gold = 0;
 
         this.setPosition(415, 198);
         this.setWidth(16);
@@ -37,6 +39,10 @@ public class Player extends Actor {
     @Override
     public void draw(Batch batch, float parentAlpha) {
         batch.draw(this.textureAtlas.findRegion("player"), this.getX(), this.getY());
+    }
+
+    public int getMaxLvlOfParty() {
+        return this.party.getMaxLevel();
     }
 
     public Vector2 getVelocity() {
@@ -80,7 +86,7 @@ public class Player extends Actor {
     public void removePokemonFromParty(Pokemon pokemon) {
         this.party.removePokemon(pokemon);
     }
-    
+
     public int getPartyStrength() {
         return this.party.getPowerPoints();
     }
@@ -94,15 +100,11 @@ public class Player extends Actor {
     }
 
     public void useItem(UsableItem item, String pokemon) {
-        item.use(this, this.pokedex.getPokemon(pokemon));
+        item.use(this, this.party.getPokemon(pokemon));
     }
 
     public void collectPokemon(Pokemon pokemon) {
-        this.pokedex.addPokemon(pokemon);
-    }
-
-    public Pokedex getPokedex() {
-        return this.pokedex;
+        this.pokedex.getPokemon(pokemon.getName()).setCollected(true);
     }
 
     @Override

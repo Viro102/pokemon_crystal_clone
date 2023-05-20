@@ -1,7 +1,7 @@
 package sk.uniza.fri.pokemon;
 
 public class GrassPokemon extends Pokemon {
-    protected GrassPokemon(String name, int health, int attack, int defense, int speed) {
-        super(name, health, attack, defense, speed);
+    public GrassPokemon(String name, int health, int attack, int defense, int speed, String evolvesInto) {
+        super(name, health, attack, defense, speed, evolvesInto);
     }
 }

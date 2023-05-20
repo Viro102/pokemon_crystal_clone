@@ -1,0 +1,263 @@
+[
+  {
+    "name": "charmander",
+    "type": "fire",
+    "baseHP": 100,
+    "baseAttack": 10,
+    "baseDefense": 10,
+    "baseSpeed": 10,
+    "evolvesInto": "charmeleon"
+  },
+  {
+    "name": "charmeleon",
+    "type": "fire",
+    "baseHP": 100,
+    "baseAttack": 20,
+    "baseDefense": 20,
+    "baseSpeed": 20,
+    "evolvesInto": "charizard"
+  },
+  {
+    "name": "charizard",
+    "type": "fire",
+    "baseHP": 100,
+    "baseAttack": 30,
+    "baseDefense": 30,
+    "baseSpeed": 30,
+    "evolvesInto": null
+  },
+  {
+    "name": "squirtle",
+    "type": "water",
+    "baseHP": 100,
+    "baseAttack": 10,
+    "baseDefense": 10,
+    "baseSpeed": 10,
+    "evolvesInto": "wartortle"
+  },
+  {
+    "name": "wartortle",
+    "type": "water",
+    "baseHP": 100,
+    "baseAttack": 20,
+    "baseDefense": 20,
+    "baseSpeed": 20,
+    "evolvesInto": "blastoise"
+  },
+  {
+    "name": "blastoise",
+    "type": "water",
+    "baseHP": 100,
+    "baseAttack": 30,
+    "baseDefense": 30,
+    "baseSpeed": 30,
+    "evolvesInto": null
+  },
+  {
+    "name": "bulbasaur",
+    "type": "grass",
+    "baseHP": 100,
+    "baseAttack": 10,
+    "baseDefense": 10,
+    "baseSpeed": 10,
+    "evolvesInto": "ivysaur"
+  },
+  {
+    "name": "ivysaur",
+    "type": "grass",
+    "baseHP": 100,
+    "baseAttack": 20,
+    "baseDefense": 20,
+    "baseSpeed": 20,
+    "evolvesInto": "venusaur"
+  },
+  {
+    "name": "venusaur",
+    "type": "grass",
+    "baseHP": 100,
+    "baseAttack": 30,
+    "baseDefense": 30,
+    "baseSpeed": 30,
+    "evolvesInto": null
+  },
+  {
+    "name": "pikachu",
+    "type": "electric",
+    "baseHP": 100,
+    "baseAttack": 10,
+    "baseDefense": 10,
+    "baseSpeed": 10,
+    "evolvesInto": "raichu"
+  },
+  {
+    "name": "raichu",
+    "type": "electric",
+    "baseHP": 100,
+    "baseAttack": 20,
+    "baseDefense": 20,
+    "baseSpeed": 20,
+    "evolvesInto": null
+  },
+  {
+    "name": "seel",
+    "type": "water",
+    "baseHP": 100,
+    "baseAttack": 10,
+    "baseDefense": 10,
+    "baseSpeed": 10,
+    "evolvesInto": "dewgong"
+  },
+  {
+    "name": "dewgong",
+    "type": "water",
+    "baseHP": 100,
+    "baseAttack": 20,
+    "baseDefense": 20,
+    "baseSpeed": 20,
+    "evolvesInto": null
+  },
+  {
+    "name": "geodude",
+    "type": "rock",
+    "baseHP": 100,
+    "baseAttack": 10,
+    "baseDefense": 10,
+    "baseSpeed": 10,
+    "evolvesInto": "graveler"
+  },
+  {
+    "name": "graveler",
+    "type": "rock",
+    "baseHP": 100,
+    "baseAttack": 20,
+    "baseDefense": 20,
+    "baseSpeed": 20,
+    "evolvesInto": "golem"
+  },
+  {
+    "name": "golem",
+    "type": "rock",
+    "baseHP": 100,
+    "baseAttack": 30,
+    "baseDefense": 30,
+    "baseSpeed": 30,
+    "evolvesInto": null
+  },
+  {
+    "name": "cyndaquil",
+    "type": "fire",
+    "baseHP": 100,
+    "baseAttack": 10,
+    "baseDefense": 10,
+    "baseSpeed": 10,
+    "evolvesInto": "quilava"
+  },
+  {
+    "name": "quilava",
+    "type": "fire",
+    "baseHP": 100,
+    "baseAttack": 20,
+    "baseDefense": 20,
+    "baseSpeed": 20,
+    "evolvesInto": "typhlosion"
+  },
+  {
+    "name": "typhlosion",
+    "type": "fire",
+    "baseHP": 100,
+    "baseAttack": 30,
+    "baseDefense": 30,
+    "baseSpeed": 30,
+    "evolvesInto": null
+  },
+  {
+    "name": "totodile",
+    "type": "water",
+    "baseHP": 100,
+    "baseAttack": 10,
+    "baseDefense": 10,
+    "baseSpeed": 10,
+    "evolvesInto": "croconaw"
+  },
+  {
+    "name": "croconaw",
+    "type": "water",
+    "baseHP": 100,
+    "baseAttack": 20,
+    "baseDefense": 20,
+    "baseSpeed": 20,
+    "evolvesInto": "feraligatr"
+  },
+  {
+    "name": "feraligatr",
+    "type": "water",
+    "baseHP": 100,
+    "baseAttack": 30,
+    "baseDefense": 30,
+    "baseSpeed": 30,
+    "evolvesInto": null
+  },
+  {
+    "name": "chikorita",
+    "type": "grass",
+    "baseHP": 100,
+    "baseAttack": 10,
+    "baseDefense": 10,
+    "baseSpeed": 10,
+    "evolvesInto": "bayleef"
+  },
+  {
+    "name": "bayleef",
+    "type": "grass",
+    "baseHP": 100,
+    "baseAttack": 20,
+    "baseDefense": 20,
+    "baseSpeed": 20,
+    "evolvesInto": "meganium"
+  },
+  {
+    "name": "meganium",
+    "type": "grass",
+    "baseHP": 100,
+    "baseAttack": 30,
+    "baseDefense": 30,
+    "baseSpeed": 30,
+    "evolvesInto": null
+  },
+  {
+    "name": "shellder",
+    "type": "water",
+    "baseHP": 100,
+    "baseAttack": 10,
+    "baseDefense": 10,
+    "baseSpeed": 10,
+    "evolvesInto": "cloyster"
+  },
+  {
+    "name": "cloyster",
+    "type": "water",
+    "baseHP": 100,
+    "baseAttack": 20,
+    "baseDefense": 20,
+    "baseSpeed": 20,
+    "evolvesInto": null
+  },
+  {
+    "name": "grimer",
+    "type": "poison",
+    "baseHP": 100,
+    "baseAttack": 10,
+    "baseDefense": 10,
+    "baseSpeed": 10,
+    "evolvesInto": "muk"
+  },
+  {
+    "name": "muk",
+    "type": "poison",
+    "baseHP": 100,
+    "baseAttack": 20,
+    "baseDefense": 20,
+    "baseSpeed": 20,
+    "evolvesInto": null
+  }
+]

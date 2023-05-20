@@ -9,18 +9,21 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import sk.uniza.fri.character.Player;
+import sk.uniza.fri.pokemon.Pokedex;
 
 public class MainMenuScreen implements Screen {
     private final GameClass game;
     private final Stage menu;
     private final Table table;
     private final Skin skin;
+    private final Pokedex pokedex;
     private ButtonGroup<TextButton> buttons;
     private boolean isPlayClicked;
 
-    public MainMenuScreen(GameClass game, Skin skin) {
+    public MainMenuScreen(GameClass game, Skin skin, Pokedex pokedex) {
         this.game = game;
         this.skin = skin;
+        this.pokedex = pokedex;
         this.isPlayClicked = false;
         this.table = new Table();
 
@@ -59,8 +62,8 @@ public class MainMenuScreen implements Screen {
         continueButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                Player player = new Player(nameField.getText());
-                MainMenuScreen.this.game.setScreen(new GameScreen(MainMenuScreen.this.game, MainMenuScreen.this.skin, player));
+                Player player = new Player(nameField.getText(), MainMenuScreen.this.pokedex);
+                MainMenuScreen.this.game.setScreen(new GameScreen(MainMenuScreen.this.game, MainMenuScreen.this.skin, player, MainMenuScreen.this.pokedex));
             }
         });
         this.table.add(continueButton).width(200);
@@ -76,7 +79,7 @@ public class MainMenuScreen implements Screen {
         if (!this.isPlayClicked) {
             if (this.buttons.getButtons().get(0).isPressed()) {
                 if (Constants.DEBUG) {
-                    this.game.setScreen(new GameScreen(this.game, this.skin, new Player("Player")));
+                    this.game.setScreen(new GameScreen(this.game, this.skin, new Player("Player", this.pokedex), this.pokedex));
                 }
                 this.isPlayClicked = true;
                 this.buttons.clear();

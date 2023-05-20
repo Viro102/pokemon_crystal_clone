@@ -1,16 +1,14 @@
 package sk.uniza.fri.game;
 
 import com.badlogic.gdx.maps.MapLayer;
-import com.badlogic.gdx.maps.objects.PolygonMapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Array;
 import sk.uniza.fri.character.Player;
-import sk.uniza.fri.pokemon.FirePokemon;
+import sk.uniza.fri.pokemon.Pokedex;
 import sk.uniza.fri.pokemon.Pokemon;
 
 public class Map {
@@ -18,10 +16,10 @@ public class Map {
     private final String mapName;
     private final Array<RectangleMapObject> collisionObjects;
     private final Array<RectangleMapObject> exitHitboxes;
-    private final Array<PolygonMapObject> pokemonSpawnAreas;
+    private final Array<RectangleMapObject> pokemonSpawnAreas;
     private final Array<Pokemon> pokemons;
 
-    public Map(String mapName, Player player) {
+    public Map(String mapName, Player player, Pokedex pokedex) {
         this.mapName = mapName;
         this.tiledMap = new TmxMapLoader().load("tmx/" + this.mapName + ".tmx");
         this.pokemons = new Array<>();
@@ -34,44 +32,45 @@ public class Map {
 
         if (this.tiledMap.getLayers().get("Pokemons") != null) {
             MapLayer pokemonLayer = this.tiledMap.getLayers().get("Pokemons");
-            this.pokemonSpawnAreas = pokemonLayer.getObjects().getByType(PolygonMapObject.class);
-            this.generatePokemons(player);
+            this.pokemonSpawnAreas = pokemonLayer.getObjects().getByType(RectangleMapObject.class);
+            this.generatePokemons(player, pokedex);
         } else {
             this.pokemonSpawnAreas = new Array<>();
         }
     }
 
-    private void generatePokemons(Player player) {
-        for (PolygonMapObject area : this.pokemonSpawnAreas) {
-            Polygon p = area.getPolygon();
-            Rectangle r = p.getBoundingRectangle();
+    private void generatePokemons(Player player, Pokedex pokedex) {
+        for (RectangleMapObject area : this.pokemonSpawnAreas) {
+            Rectangle rectangle = area.getRectangle();
             for (int i = 0; i < 10; i++) {
-                float x = MathUtils.random(r.getX(), r.getX() + r.getWidth());
-                float y = MathUtils.random(r.getY(), r.getY() + r.getHeight());
-                if (p.contains(x, y)) {
-                    int[] stats = this.generatePokemonStats(player);
-                    FirePokemon pokemon = new FirePokemon("charmander", stats[0], stats[1], stats[2], stats[3], stats[4]);
-                    pokemon.setPosition(x, y);
-                    this.pokemons.add(pokemon);
-                }
+                float x = MathUtils.random(rectangle.getX(), rectangle.getX() + rectangle.getWidth());
+                float y = MathUtils.random(rectangle.getY(), rectangle.getY() + rectangle.getHeight());
+                Pokemon pokemon = this.randomizePokemonStats(player, pokedex);
+                pokemon.setPosition(x, y);
+                this.pokemons.add(pokemon);
             }
         }
     }
 
-    private int[] generatePokemonStats(Player player) {
+    private Pokemon randomizePokemonStats(Player player, Pokedex pokedex) {
         int[] pokemonStats = new int[5];
         int playerPartyPower = player.getPartyStrength();
+        Pokemon pokemon = pokedex.getRandomPokemon();
 
-        // first position is for level
-        for (int i = 1; i < pokemonStats.length; i++) {
+        // first stat is always level
+        for (int i = 0; i < pokemonStats.length; i++) {
+            if (i == 0) {
+                pokemonStats[i] = Math.abs(MathUtils.random(player.getMaxLvlOfParty() - 2, player.getMaxLvlOfParty() + 2));
+                continue;
+            }
             pokemonStats[i] = Math.abs(MathUtils.random(playerPartyPower - 2, playerPartyPower + 2));
         }
-        pokemonStats[0] = Math.abs(MathUtils.random(playerPartyPower / 4 - 1, playerPartyPower / 4 + 1));
+        pokemon.setStats(pokemonStats);
 
-        return pokemonStats;
+        return pokemon;
     }
 
-    public Array<PolygonMapObject> getPokemonSpawnAreas() {
+    public Array<RectangleMapObject> getPokemonSpawnAreas() {
         return this.pokemonSpawnAreas;
     }
 

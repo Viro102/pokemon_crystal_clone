@@ -1,5 +1,6 @@
 package sk.uniza.fri.game;
 
+import com.badlogic.gdx.utils.Null;
 import sk.uniza.fri.pokemon.Pokemon;
 
 import java.util.ArrayList;
@@ -24,6 +25,16 @@ public class Party {
         this.powerPoints += pokemon.getPowerPoints();
     }
 
+    public int getMaxLevel() {
+        int maxLevel = 0;
+        for (Pokemon pokemon : this.pokemons) {
+            if (pokemon.getLevel() > maxLevel) {
+                maxLevel = pokemon.getLevel();
+            }
+        }
+        return maxLevel;
+    }
+
     public void removePokemon(Pokemon pokemon) {
         if (!this.pokemons.contains(pokemon)) {
             throw new IllegalStateException("Pokemon is not in party");
@@ -42,5 +53,15 @@ public class Party {
 
     public int getSize() {
         return this.size;
+    }
+
+    @Null
+    public Pokemon getPokemon(String pokemon) {
+        for (Pokemon p : this.pokemons) {
+            if (p.getName().equals(pokemon)) {
+                return p;
+            }
+        }
+        return null;
     }
 }

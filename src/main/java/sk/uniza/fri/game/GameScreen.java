@@ -38,24 +38,24 @@ public class GameScreen implements Screen {
     private Array<PolygonMapObject> pokemonSpawnAreas;
     private TiledMapRenderer mapRenderer;
 
-    public GameScreen(GameClass game, Skin skin) {
+    public GameScreen(GameClass game, Skin skin, Player player) {
         this.game = game;
         this.skin = skin;
+        this.player = player;
+        this.gameController = new GameController(this.player, this);
         this.environmentStage = new Stage(new FitViewport(Constants.MAP_SIZE, Constants.MAP_SIZE));
 
         this.environmentStage.getCamera().position.set(Constants.MAP_SIZE / 2f, Constants.MAP_SIZE / 2f, 0);
         this.environmentStage.getCamera().update();
+        this.environmentStage.addActor(this.player);
 
-        this.map = new Map("starter_town");
+        this.map = new Map("starter_town", this.player);
+
         this.currentZone = this.map.getMapName();
+
         this.mapRenderer = new OrthogonalTiledMapRenderer(this.map.getTiledMap(), this.environmentStage.getBatch());
 
         this.initZone();
-
-        this.player = new Player("Ash");
-        this.environmentStage.addActor(this.player);
-
-        this.gameController = new GameController(this.player, this);
     }
 
     public void initZone() {
@@ -80,10 +80,12 @@ public class GameScreen implements Screen {
         String prevZone = this.currentZone;
         this.currentZone = nextZone;
 
-        this.map = new Map(nextZone);
+        this.map = new Map(nextZone, this.player);
         this.mapRenderer = new OrthogonalTiledMapRenderer(this.map.getTiledMap(), this.environmentStage.getBatch());
 
         this.initZone();
+
+        this.map.getPokemons().forEach(this.environmentStage::addActor);
 
         if (this.currentZone.equals("starter_forest") && prevZone.equals("starter_town")) {
             this.player.setPosition(55, 462);
@@ -219,17 +221,21 @@ public class GameScreen implements Screen {
 
     @Override
     public void pause() {
+        // unused
     }
 
     @Override
     public void resume() {
+        // unused
     }
 
     @Override
     public void hide() {
+        // unused
     }
 
     @Override
     public void show() {
+        // unused
     }
 }

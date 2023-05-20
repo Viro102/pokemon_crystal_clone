@@ -55,7 +55,7 @@ public abstract class Pokemon extends Actor {
         this.attack = attack;
         this.health = health;
         this.skills = new ArrayList<>();
-        this.level = 0;
+        this.level = 1;
         this.experience = 0;
         this.fainted = false;
 

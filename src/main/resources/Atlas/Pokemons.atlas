@@ -1,19 +1,19 @@
 
 Pokemons.png
-size: 256, 256
+size: 512, 256
 format: RGBA8888
 filter: Nearest, Nearest
 repeat: none
 blastoise
   rotate: false
-  xy: 169, 162
+  xy: 2, 2
   size: 70, 70
   orig: 70, 70
   offset: 0, 0
   index: -1
 bulbasaur
   rotate: false
-  xy: 134, 2
+  xy: 212, 4
   size: 40, 40
   orig: 40, 40
   offset: 0, 0
@@ -27,28 +27,77 @@ charizard
   index: -1
 charmander
   rotate: false
-  xy: 186, 44
+  xy: 264, 46
   size: 50, 50
   orig: 50, 50
   offset: 0, 0
   index: -1
 charmeleon
   rotate: false
-  xy: 2, 8
+  xy: 377, 168
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+cloyster
+  rotate: false
+  xy: 146, 23
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+dewgong
+  rotate: false
+  xy: 311, 166
+  size: 64, 66
+  orig: 64, 66
+  offset: 0, 0
+  index: -1
+geodude
+  rotate: false
+  xy: 443, 168
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+golem
+  rotate: false
+  xy: 74, 8
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+graveler
+  rotate: false
+  xy: 241, 164
+  size: 68, 68
+  orig: 68, 68
+  offset: 0, 0
+  index: -1
+grimer
+  rotate: false
+  xy: 307, 98
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 ivysaur
   rotate: false
-  xy: 84, 106
+  xy: 316, 49
   size: 53, 47
   orig: 53, 47
   offset: 0, 0
   index: -1
+muk
+  rotate: false
+  xy: 169, 158
+  size: 70, 74
+  orig: 70, 74
+  offset: 0, 0
+  index: -1
 pikachu
   rotate: false
-  xy: 68, 8
+  xy: 241, 98
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
@@ -60,9 +109,23 @@ raichu
   orig: 76, 76
   offset: 0, 0
   index: -1
+seel
+  rotate: false
+  xy: 80, 86
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+shellder
+  rotate: false
+  xy: 254, 4
+  size: 40, 40
+  orig: 40, 40
+  offset: 0, 0
+  index: -1
 squirtle
   rotate: false
-  xy: 134, 44
+  xy: 212, 46
   size: 50, 50
   orig: 50, 50
   offset: 0, 0
@@ -76,7 +139,7 @@ venusaur
   index: -1
 wartortle
   rotate: false
-  xy: 169, 96
+  xy: 146, 89
   size: 64, 64
   orig: 64, 64
   offset: 0, 0

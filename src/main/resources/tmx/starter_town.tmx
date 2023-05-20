@@ -24,7 +24,7 @@
  </layer>
  <layer id="6" name="NPCs" width="48" height="48">
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAACu3OMQkAAAgAMMG4ZrC7ITxE2BIsAoBLldeDnX7+BwAAAAAAAPhuAPtGAgoAJAAA
+   H4sIAAAAAAAACu3WsQ3AIBAEQSSXS25IyG1Xzffg4PVoRrp8w2sNgEz9yi74ZxXvBwCAE9zxy0dsFv3nT3S/sa9oPwAAAEC2DbIjtD8AJAAA
   </data>
  </layer>
  <objectgroup id="8" name="Collision">

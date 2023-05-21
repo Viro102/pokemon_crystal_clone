@@ -5,15 +5,22 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import sk.uniza.fri.ability.Ability;
 import sk.uniza.fri.game.Constants;
 import sk.uniza.fri.item.Effect;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 
 public abstract class Pokemon extends Actor {
-    private final ArrayList<Ability> abilities;
+
+    private static final int LVL_EVOLUTION_TO_TIER_2 = 16;
+    private static final int LVL_EVOLUTION_TO_TIER_3 = 36;
     private final String evolvesInto;
+    private final ArrayList<Effect> statusEffects;
+    private final ArrayList<Ability> abilities;
+    private final String type;
+    private int tier;
+    private int maxHealth;
     private int defense;
     private int speed;
     private TextureAtlas textureAtlas;
@@ -23,30 +30,51 @@ public abstract class Pokemon extends Actor {
     private int level;
     private int experience;
     private boolean isCollected;
-    private Effect statusEffect;
 
-    protected Pokemon(String name, int level, int health, int attack, int defense, int speed, String evolvesInto) {
+    protected Pokemon(String name, int tier, int level, int health, int attack, int defense, int speed, String evolvesInto) {
+        this.tier = tier;
         this.level = level;
         this.health = health;
+        this.maxHealth = health;
         this.attack = attack;
         this.defense = defense;
         this.speed = speed;
         this.evolvesInto = evolvesInto;
         this.abilities = new ArrayList<>();
+        this.statusEffects = new ArrayList<>();
         this.experience = 0;
         this.fainted = false;
         this.isCollected = false;
+        this.type = "normal";
 
         this.setName(name);
         this.initSprite();
     }
 
-    protected Pokemon(String name, int health, int attack, int defense, int speed, String evolvesInto) {
-        this(name, 1, health, attack, defense, speed, evolvesInto);
+    protected Pokemon(String name, int tier, int health, int attack, int defense, int speed, String evolvesInto) {
+        this(name, tier, 1, health, attack, defense, speed, evolvesInto);
     }
 
-    protected Pokemon(String name, int health, int attack, int defense, int speed) {
-        this(name, health, attack, defense, speed, null);
+    protected Pokemon(Pokemon original) {
+        this(original.getName(), original.getTier(), original.getLevel(), original.getHealth(), original.getAttack(), original.getDefense(), original.getSpeed(), original.getEvolvesInto());
+        this.textureAtlas = original.textureAtlas;
+        for (Ability ability : original.getAbilities()) {
+            this.abilities.add(ability.copy());
+        }
+    }
+
+    public abstract String getType();
+
+    public abstract double getEffectiveness(Pokemon otherPokemon);
+
+    public abstract Pokemon copy();
+
+    private String getEvolvesInto() {
+        return this.evolvesInto;
+    }
+
+    private int getTier() {
+        return this.tier;
     }
 
     public void initSprite() {
@@ -61,14 +89,6 @@ public abstract class Pokemon extends Actor {
         }
     }
 
-    public void attack(Pokemon pokemon, OffensiveAbility skill) {
-        pokemon.decreaseHP(skill.getDamage());
-    }
-
-    public Iterator<Ability> getAbilities() {
-        return this.abilities.iterator();
-    }
-
     public void gainExp(int exp) {
         this.experience += exp;
         if (this.experience >= 100) {
@@ -76,10 +96,16 @@ public abstract class Pokemon extends Actor {
         }
     }
 
-    private void levelUp() {
+    public void levelUp() {
         this.level++;
+        if (this.level >= LVL_EVOLUTION_TO_TIER_2 && this.tier == 1 && this.evolvesInto != null) {
+            this.evolve();
+        }
+        if (this.level >= LVL_EVOLUTION_TO_TIER_3 && this.tier == 2 && this.evolvesInto != null) {
+            this.evolve();
+        }
         this.experience = 0;
-        this.health += 1 / 50f * this.health;
+        this.setMaxHealth((int) (this.getMaxHealth() + 1 / 50f * this.getMaxHealth()));
         this.attack += 1 / 50f * this.attack;
         this.defense += 1 / 50f * this.defense;
         this.speed += 1 / 50f * this.speed;
@@ -89,8 +115,9 @@ public abstract class Pokemon extends Actor {
         return this.level;
     }
 
+
     public void evolve() {
-        System.out.println("Pokemon " + this.getName() + " evolved!");
+        this.tier++;
     }
 
     public void addAbility(Ability ability) {
@@ -100,7 +127,11 @@ public abstract class Pokemon extends Actor {
     }
 
     public void increaseHP(int hp) {
-        this.health += hp;
+        if (this.health + hp <= this.maxHealth) {
+            this.health += hp;
+        } else {
+            this.health = this.maxHealth;
+        }
     }
 
     public void increaseATT(int attack) {
@@ -119,9 +150,11 @@ public abstract class Pokemon extends Actor {
         this.health -= hp;
         if (this.health <= 0) {
             this.fainted = true;
+            this.health = 0;
         }
     }
 
+    //TODO implement
     public void decreaseATT(int attack) {
         this.attack -= attack;
     }
@@ -138,11 +171,22 @@ public abstract class Pokemon extends Actor {
         return this.attack;
     }
 
+    public void setAttack(int attack) {
+        this.attack = attack;
+    }
 
     public int getHealth() {
         return this.health;
     }
 
+    public int getMaxHealth() {
+        return this.maxHealth;
+    }
+
+    public void setMaxHealth(int health) {
+        this.maxHealth = health;
+        this.health = health;
+    }
 
     public boolean hasFainted() {
         return this.fainted;
@@ -152,11 +196,17 @@ public abstract class Pokemon extends Actor {
         return this.defense;
     }
 
+    public void setDefense(int defense) {
+        this.defense = defense;
+    }
 
     public int getSpeed() {
         return this.speed;
     }
 
+    public void setSpeed(int speed) {
+        this.speed = speed;
+    }
 
     public int getPowerPoints() {
         int powerPoints = 0;
@@ -166,6 +216,22 @@ public abstract class Pokemon extends Actor {
         powerPoints += 1 / 5f * this.speed;
         powerPoints += this.level;
         return powerPoints;
+    }
+
+    public Iterable<Effect> getStatusEffects() {
+        return this.statusEffects;
+    }
+
+    public void addStatusEffect(Effect effect) {
+        this.statusEffects.add(effect);
+    }
+
+    public Ability getAbility(int index) {
+        return this.abilities.get(index);
+    }
+
+    public Iterable<Ability> getAbilities() {
+        return this.abilities;
     }
 
     public void setCollected(boolean collected) {
@@ -186,15 +252,19 @@ public abstract class Pokemon extends Actor {
         if (pokemonStats.length != 5) {
             throw new IllegalArgumentException("Pokemon stats must be 5!");
         }
-        this.level = pokemonStats[0];
-        this.health = pokemonStats[1];
-        this.attack = pokemonStats[2];
-        this.defense = pokemonStats[3];
-        this.speed = pokemonStats[4];
+        if (pokemonStats[0] >= 1) {
+            for (int i = 0; i < pokemonStats[0]; i++) {
+                this.levelUp();
+            }
+            this.setMaxHealth(pokemonStats[1]);
+            this.setAttack(pokemonStats[2]);
+            this.setDefense(pokemonStats[3]);
+            this.setSpeed(pokemonStats[4]);
+        }
     }
 
-    public void setStatusEffect(Effect effect) {
-        this.statusEffect = effect;
+    public int getNumOfAbilities() {
+        return this.abilities.size();
     }
 
     @Override
@@ -203,28 +273,35 @@ public abstract class Pokemon extends Actor {
 
         if (Constants.DEBUG) {
             BitmapFont font = new BitmapFont();
-            String stats = "NAME: " + this.getName()
-                    + "\n"
-                    + " LVL: " + this.getLevel()
-                    + " HP: " + this.getHealth()
-                    + " ATK: " + this.getAttack()
-                    + " DEF: " + this.getDefense();
-            font.draw(batch, stats, this.getX(), this.getY() + this.getHeight());
+            font.draw(batch, this.toString(), this.getX() - this.getWidth() - 100, this.getY());
         }
     }
 
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append(this.getName())
-                .append(" HP: ")
-                .append(this.health)
-                .append(" ATT: ")
-                .append(this.attack)
+        sb.append("NAME: ").append(this.getName())
+                .append(" LVL : ").append(this.getLevel())
+                .append(" EXP: ").append(this.experience)
+                .append(" HP: ").append(this.getHealth())
+                .append(" ATT: ").append(this.getAttack())
+                .append(" DEF: ").append(this.getDefense())
+                .append(" SPD: ").append(this.getSpeed())
+                .append(" PP: ").append(this.getPowerPoints()).append(System.lineSeparator())
+                .append("FAINTED: ").append(this.hasFainted())
+                .append(" COLLECTED: ").append(this.isCollected)
+                .append(" ABILITIES: ").append(this.getAbilities().spliterator().getExactSizeIfKnown())
+                .append(" STATUS EFFECTS: ").append(this.getStatusEffects().spliterator().getExactSizeIfKnown())
+                .append(" EVOLVES INTO: ").append(this.evolvesInto)
+                .append(" TIER: ").append(this.tier)
                 .append(System.lineSeparator());
-        for (Ability ability : this.abilities) {
-            sb.append(ability)
-                    .append(System.lineSeparator());
+
+        for (Ability ability : this.getAbilities()) {
+            sb.append(ability).append(System.lineSeparator());
+        }
+
+        for (Effect statusEffect : this.getStatusEffects()) {
+            sb.append(statusEffect).append(System.lineSeparator());
         }
 
         return sb.toString();

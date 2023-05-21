@@ -12,12 +12,24 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
+/**
+ * The SettingsScreen class represents a screen where the user can modify game settings.
+ * Work in progress.
+ */
 public class SettingsScreen implements Screen {
     private final MainMenuScreen mainMenu;
     private final GameClass game;
     private final Stage stage;
 
     //TODO implement settings screen
+
+    /**
+     * Constructs a new SettingsScreen.
+     *
+     * @param game     The game where the settings screen is used
+     * @param skin     The skin used for UI elements on the settings screen
+     * @param mainMenu The main menu of the game
+     */
     public SettingsScreen(GameClass game, Skin skin, MainMenuScreen mainMenu) {
         this.game = game;
         this.mainMenu = mainMenu;
@@ -55,9 +67,20 @@ public class SettingsScreen implements Screen {
         this.stage.draw();
     }
 
+    /**
+     * Called when the game window is resized. Updates the viewport to match the new window size.
+     *
+     * @param width  The new width of the window
+     * @param height The new height of the window
+     */
     @Override
     public void resize(int width, int height) {
         this.stage.getViewport().update(width, height, true);
+    }
+
+    @Override
+    public void dispose() {
+        this.stage.dispose();
     }
 
     @Override
@@ -75,8 +98,4 @@ public class SettingsScreen implements Screen {
         //unused
     }
 
-    @Override
-    public void dispose() {
-        this.stage.dispose();
-    }
 }

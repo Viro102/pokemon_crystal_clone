@@ -11,6 +11,12 @@ import sk.uniza.fri.item.Effect;
 
 import java.util.ArrayList;
 
+/**
+ * Pokemon is an abstract class representing a Pokemon in the game.
+ * It contains basic properties and behaviors that all Pokemon should have,
+ * such as health, attack, defense, and speed attributes, as well as abilities
+ * and status effects. The Pokemon can also gain experience, level up, and evolve.
+ */
 public abstract class Pokemon extends Actor {
 
     private static final int LVL_EVOLUTION_TO_TIER_2 = 16;
@@ -30,6 +36,19 @@ public abstract class Pokemon extends Actor {
     private int experience;
     private boolean isCollected;
 
+    /**
+     * Full constructor for the Pokemon class.
+     * Initializes a new instance of a Pokemon with specific attributes.
+     *
+     * @param name        The name of the Pokemon.
+     * @param tier        The evolutionary tier of the Pokemon.
+     * @param level       The current level of the Pokemon.
+     * @param health      The current health of the Pokemon.
+     * @param attack      The current attack power of the Pokemon.
+     * @param defense     The current defense power of the Pokemon.
+     * @param speed       The current speed of the Pokemon.
+     * @param evolvesInto The name of the Pokemon this Pokemon evolves into.
+     */
     protected Pokemon(String name, int tier, int level, int health, int attack, int defense, int speed, String evolvesInto) {
         this.tier = tier;
         this.level = level;
@@ -53,6 +72,11 @@ public abstract class Pokemon extends Actor {
         this(name, tier, 1, health, attack, defense, speed, evolvesInto);
     }
 
+    /**
+     * Copy constructor for the Pokemon class.
+     *
+     * @param original The original Pokemon to copy.
+     */
     protected Pokemon(Pokemon original) {
         this(original.getName(), original.getTier(), original.getLevel(), original.getHealth(), original.getAttack(), original.getDefense(), original.getSpeed(), original.getEvolvesInto());
         this.textureAtlas = original.textureAtlas;
@@ -63,8 +87,20 @@ public abstract class Pokemon extends Actor {
 
     public abstract String getType();
 
+    /**
+     * Calculates and returns the effectiveness of this Pokemon against another Pokemon.
+     *
+     * @param otherPokemon The other Pokemon.
+     * @return A double representing the effectiveness of this Pokemon against the other Pokemon.
+     */
+
     public abstract double getEffectiveness(Pokemon otherPokemon);
 
+    /**
+     * Creates and returns a copy of this Pokemon.
+     *
+     * @return A new instance of Pokemon that is a copy of this Pokemon.
+     */
     public abstract Pokemon copy();
 
     private String getEvolvesInto() {
@@ -75,6 +111,13 @@ public abstract class Pokemon extends Actor {
         return this.tier;
     }
 
+    /**
+     * Initialises the sprite of the Pokemon.
+     * This method should be called after the Pokemon has been created.
+     * It sets the sprite of the Pokemon to the corresponding texture in the Atlas.
+     * If the texture is not found, an error message is printed.
+     * This method automatically sets the texture for all potential subclasses of Pokemon.
+     */
     public void initSprite() {
         this.textureAtlas = new TextureAtlas("Atlas/Pokemons.atlas");
         if (this.textureAtlas.findRegion(this.getName()) == null) {
@@ -87,6 +130,12 @@ public abstract class Pokemon extends Actor {
         }
     }
 
+    /**
+     * Increases experience points of the Pokemon.
+     * If the Pokemon has enough experience points, it levels up.
+     *
+     * @param exp The amount of experience points to increase by.
+     */
     public void gainExp(int exp) {
         this.experience += exp;
         if (this.experience >= 100) {
@@ -94,6 +143,9 @@ public abstract class Pokemon extends Actor {
         }
     }
 
+    /**
+     * Causes the Pokemon to level up, increasing its stats and potentially causing it to evolve.
+     */
     public void levelUp() {
         this.level++;
         if (this.level >= LVL_EVOLUTION_TO_TIER_2 && this.tier == 1 && this.evolvesInto != null) {
@@ -134,6 +186,12 @@ public abstract class Pokemon extends Actor {
         }
     }
 
+    /**
+     * Increases the health of the Pokemon by the given amount.
+     * If the health of the Pokemon is greater than the maximum health, the health is set to the maximum health.
+     *
+     * @param hp The amount of health to increase by.
+     */
     public void increaseHP(int hp) {
         if (this.health + hp <= this.maxHealth) {
             this.health += hp;
@@ -153,6 +211,14 @@ public abstract class Pokemon extends Actor {
     public void increaseSPD(int speed) {
         this.speed += speed;
     }
+
+    /**
+     * Attempts to decrease the health of the Pokemon by the given amount.
+     * If the health of the Pokemon is less than or equal to 0, the Pokemon is considered fainted.
+     * If the health of the Pokemon is less than 0, the health is set to 0.
+     *
+     * @param hp The amount of health to decrease by.
+     */
 
     public void decreaseHP(int hp) {
         this.health -= hp;
@@ -220,6 +286,9 @@ public abstract class Pokemon extends Actor {
         this.speed = speed;
     }
 
+    /**
+     * Returns the power points of the Pokemon, which is calculated by the sum of the Pokemon's stats.
+     */
     public int getPowerPoints() {
         int powerPoints = 0;
         powerPoints += 1 / 5f * this.health;
@@ -246,10 +315,18 @@ public abstract class Pokemon extends Actor {
         return this.abilities;
     }
 
+    /**
+     * Heals the Pokemon to full health
+     */
     public void heal() {
         this.health = this.maxHealth;
     }
 
+    /**
+     * Returns all stats of the Pokemon in an array
+     *
+     * @return an array of 5 integers, representing the level, health, attack, defense and speed of the Pokemon
+     */
     public int[] getStats() {
         int[] stats = new int[5];
         stats[0] = this.level;
@@ -260,6 +337,11 @@ public abstract class Pokemon extends Actor {
         return stats;
     }
 
+    /**
+     * Sets stats in bulk
+     *
+     * @param pokemonStats an array of 5 integers, representing the level, health, attack, defense and speed of the Pokemon
+     */
     public void setStats(int[] pokemonStats) {
         if (pokemonStats.length != 5) {
             throw new IllegalArgumentException("Pokemon stats must be 5!");
@@ -287,6 +369,13 @@ public abstract class Pokemon extends Actor {
         return this.abilities.size();
     }
 
+    /**
+     * Draw method for usage in the rendering classes of the game.
+     * For example in the render method of the Screen class.
+     *
+     * @param batch       The Batch used for drawing.
+     * @param parentAlpha The parent alpha, which influences the transparency.
+     */
     @Override
     public void draw(Batch batch, float parentAlpha) {
         batch.draw(this.textureAtlas.findRegion(this.getName()), this.getX(), this.getY(), this.getOriginX(), this.getOriginY(), this.getWidth(), this.getHeight(), this.getScaleX(), this.getScaleY(), this.getRotation());

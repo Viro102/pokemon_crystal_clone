@@ -15,6 +15,9 @@ import sk.uniza.fri.pokemon.Pokemon;
 
 import java.util.*;
 
+/**
+ * The Zone class represents a map or location in the game with various features like Pokemon spawn areas, collision objects, and exit points.
+ */
 public class Zone {
     private final TiledMap tiledMap;
     private final String mapName;
@@ -23,6 +26,13 @@ public class Zone {
     private final ArrayList<RectangleMapObject> pokemonSpawnAreas;
     private final ArrayList<Pokemon> pokemons;
 
+    /**
+     * Constructs a new Zone with the given parameters.
+     *
+     * @param mapName The name of the map
+     * @param player  The player who is in this zone
+     * @param pokedex The Pokedex containing information about Pokemon
+     */
     public Zone(String mapName, Player player, Pokedex pokedex) {
         this.mapName = mapName;
         this.tiledMap = new TmxMapLoader().load("tmx/" + this.mapName + ".tmx");
@@ -107,18 +117,38 @@ public class Zone {
         return pokemon;
     }
 
+    /**
+     * Retrieves the spawn areas for Pokemon in the zone.
+     *
+     * @return A list of RectangleMapObject representing the spawn areas
+     */
     public List<RectangleMapObject> getPokemonSpawnAreas() {
         return new ArrayList<>(this.pokemonSpawnAreas);
     }
 
+    /**
+     * Retrieves the objects in the zone that the player can collide with.
+     *
+     * @return A list of RectangleMapObject representing the collision objects
+     */
     public List<RectangleMapObject> getCollisionObjects() {
         return new ArrayList<>(this.collisionObjects);
     }
 
+    /**
+     * Retrieves the exit points in the zone.
+     *
+     * @return A copy of a list of RectangleMapObject representing the exit hitboxes
+     */
     public List<RectangleMapObject> getExitHitboxes() {
         return new ArrayList<>(this.exitHitboxes);
     }
 
+    /**
+     * Retrieves the Pokemon present in the zone along with their hitboxes.
+     *
+     * @return A unmodifiable Map with Pokemon as keys and their corresponding hitboxes as values
+     */
     public Map<Pokemon, Rectangle> getPokemons() {
         HashMap<Pokemon, Rectangle> pokemonHitbox = new HashMap<>();
 
@@ -129,10 +159,20 @@ public class Zone {
         return Collections.unmodifiableMap(pokemonHitbox);
     }
 
+    /**
+     * Retrieves the name of the map for this zone.
+     *
+     * @return A string representing the map name
+     */
     public String getMapName() {
         return this.mapName;
     }
 
+    /**
+     * Retrieves the TiledMap object associated with this zone.
+     *
+     * @return The TiledMap object
+     */
     public TiledMap getTiledMap() {
         return this.tiledMap;
     }

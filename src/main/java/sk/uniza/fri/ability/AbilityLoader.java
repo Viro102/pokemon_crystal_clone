@@ -9,9 +9,15 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * Class that loads abilities from JSON file
+ */
 public class AbilityLoader {
     private final HashMap<String, ArrayList<Ability>> abilities;
 
+    /**
+     * Constructor which adds all abilities from a specific JSON file to the list of abilities
+     */
     public AbilityLoader() {
         this.abilities = new HashMap<>();
         JsonReader json = new JsonReader();
@@ -83,6 +89,13 @@ public class AbilityLoader {
             this.abilities.get(type).add(ability);
         }
     }
+
+    /**
+     * Returns a copy of list of abilities of a specific type
+     *
+     * @param type Type of abilities
+     * @return List of abilities
+     */
 
     public List<Ability> getAbilities(String type) {
         ArrayList<Ability> copyAbilities = new ArrayList<>();

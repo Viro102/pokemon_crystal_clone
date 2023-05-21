@@ -11,6 +11,9 @@ import sk.uniza.fri.item.UsableItem;
 import sk.uniza.fri.pokemon.Pokedex;
 import sk.uniza.fri.pokemon.Pokemon;
 
+/**
+ * Class managing the player's party, inventory, gold and sprite.
+ */
 public class Player extends Actor {
     private final Party party;
     private final Inventory inventory;
@@ -21,6 +24,12 @@ public class Player extends Actor {
     private int gold;
     private int collectedPokemons;
 
+    /**
+     * Constructor for the player.
+     *
+     * @param name    Name of the player
+     * @param pokedex Pokedex of the player
+     */
     public Player(String name, Pokedex pokedex) {
         super();
         this.pokedex = pokedex;
@@ -71,7 +80,6 @@ public class Player extends Actor {
         return this.inventory.getItem(item);
     }
 
-
     public void update(float deltaTime) {
         this.setPosition(this.getX() + this.velocity.x * deltaTime, this.getY());
         this.velocity.x = 0;
@@ -106,12 +114,22 @@ public class Player extends Actor {
         this.inventory.removeItem(item);
     }
 
+    /**
+     * Collects the pokemon and adds it to the party.
+     *
+     * @param pokemon Pokemon to be collected
+     */
     public void collectPokemon(Pokemon pokemon) {
         this.pokedex.getPokemon(pokemon.getName()).setCollected(true);
         this.addPokemonToParty(pokemon);
         this.collectedPokemons++;
     }
 
+    /**
+     * Returns the first pokemon in the party.
+     *
+     * @return First pokemon in the party
+     */
     public Pokemon getFirstPokemon() {
         return this.party.getFirstPokemon();
     }

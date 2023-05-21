@@ -22,6 +22,12 @@ import sk.uniza.fri.pokemon.Pokemon;
 
 import java.util.ArrayList;
 
+/**
+ * Class that represents the game screen where the gameplay is rendered.
+ * This class includes methods for initializing and updating the player HUD,
+ * pausing and resuming the game, starting battles, switching game zones,
+ * handling screen resizing, and disposing resources when they are no longer needed.
+ */
 public class GameScreen implements Screen {
     private static final int MAP_SIZE = 48 * 16;
     private final GameClass game;
@@ -118,6 +124,11 @@ public class GameScreen implements Screen {
         this.exitHitboxes = (ArrayList<RectangleMapObject>) this.zone.getExitHitboxes();
     }
 
+    /**
+     * Switches the current game zone to a new one.
+     *
+     * @param nextZone the name of the zone to switch to
+     */
     public void switchZone(String nextZone) {
         this.zone.getTiledMap().dispose();
         this.environmentStage.clear();
@@ -141,6 +152,11 @@ public class GameScreen implements Screen {
             this.player.setPosition(723, 610);
         }
     }
+
+    /**
+     * Pauses the game. This method sets the pause stage and its buttons,
+     * such as Pokedex, Pokemon, Bag, Player, Save, Options, and Exit.
+     */
 
     public void pauseGame() {
         this.isPaused = true;
@@ -221,18 +237,38 @@ public class GameScreen implements Screen {
         Gdx.input.setInputProcessor(this.pauseStage);
     }
 
+    /**
+     * Resumes the game by setting isPaused to false.
+     */
     public void resumeGame() {
         this.isPaused = false;
     }
 
+    /**
+     * Returns whether the game is paused or not.
+     *
+     * @return true if the game is paused, false otherwise
+     */
     public boolean isPaused() {
         return this.isPaused;
     }
 
+    /**
+     * Starts a new battle by switching to a BattleScreen.
+     *
+     * @param enemyPokemon the Pokemon that the player will fight against
+     */
     public void startBattle(Pokemon enemyPokemon) {
         this.game.setScreen(new BattleScreen(this.game, this, this.skin, this.player, enemyPokemon));
     }
 
+    /**
+     * Renders the game screen. This method clears the screen, handles player input,
+     * checks for collisions, updates the player and the game stages, and draws
+     * everything to the screen.
+     *
+     * @param delta the time interval for the game update
+     */
     @Override
     public void render(float delta) {
         ScreenUtils.clear(0.54f, 1, 0.61f, 1);
@@ -267,17 +303,38 @@ public class GameScreen implements Screen {
         }
     }
 
+    /**
+     * Shows the game screen by setting the input processor to the environment stage.
+     */
+    @Override
+    public void show() {
+        Gdx.input.setInputProcessor(this.environmentStage);
+    }
+
+    /**
+     * Resizes the game screen. This method updates the viewports of the stages
+     * to match the new screen dimensions.
+     *
+     * @param width  the new screen width
+     * @param height the new screen height
+     */
     @Override
     public void resize(int width, int height) {
         this.hudStage.getViewport().update(width, height, true);
         this.environmentStage.getViewport().update(width, height, true);
     }
 
+    /**
+     * Disposes resources when they are no longer needed.
+     */
     @Override
     public void dispose() {
         this.environmentStage.dispose();
+        this.hudStage.dispose();
+        this.pauseStage.dispose();
     }
 
+    // The following methods are not used in this class, but they are required by the Screen interface.
     @Override
     public void pause() {
         // unused
@@ -291,10 +348,5 @@ public class GameScreen implements Screen {
     @Override
     public void hide() {
         // unused
-    }
-
-    @Override
-    public void show() {
-        Gdx.input.setInputProcessor(this.environmentStage);
     }
 }

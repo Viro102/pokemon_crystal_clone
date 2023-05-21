@@ -10,15 +10,29 @@ import sk.uniza.fri.pokemon.Pokemon;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Class that handles the inputs and checks for collisions within the game.
+ */
 public class GameController {
     private final Player player;
     private final GameScreen gameScreen;
 
+    /**
+     * Constructs a new GameController with the specified player and game screen.
+     *
+     * @param player     the player of the game
+     * @param gameScreen the screen where the game is rendered
+     */
     public GameController(Player player, GameScreen gameScreen) {
         this.player = player;
         this.gameScreen = gameScreen;
     }
 
+    /**
+     * Handles player's inputs. This method processes keyboard inputs for
+     * moving the player and pausing/resuming the game. It also prints out
+     * the player's current coordinates when 'X' is pressed and the game is in debug mode.
+     */
     public void handleInput() {
         if (Gdx.input.isKeyPressed(Input.Keys.W)) {
             this.player.moveUp();
@@ -46,6 +60,16 @@ public class GameController {
         }
     }
 
+    /**
+     * Checks if there's a collision between the player and other game objects,
+     * including collision objects, exits and other pokemons. The player's movement is
+     * adjusted based on these collisions.
+     *
+     * @param delta            the time interval for the game update
+     * @param collisionObjects the list of objects in the game map that can collide with the player
+     * @param exits            the list of exits in the game map
+     * @param pokemons         the list of pokemons in the game map
+     */
     public void checkCollisions(float delta, List<RectangleMapObject> collisionObjects, List<RectangleMapObject> exits, Map<Pokemon, Rectangle> pokemons) {
         Rectangle futureX = new Rectangle(this.player.getX() + this.player.getVelocity().x * delta, this.player.getY(), this.player.getWidth(), this.player.getHeight());
         Rectangle futureY = new Rectangle(this.player.getX(), this.player.getY() + this.player.getVelocity().y * delta, this.player.getWidth(), this.player.getHeight());

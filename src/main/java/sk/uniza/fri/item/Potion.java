@@ -2,6 +2,9 @@ package sk.uniza.fri.item;
 
 import sk.uniza.fri.pokemon.Pokemon;
 
+/**
+ * Potion is a specific item in the game that can be used to provide a certain effect to a Pokemon.
+ */
 public class Potion implements UsableItem {
     private final String name;
     private final String description;
@@ -9,6 +12,15 @@ public class Potion implements UsableItem {
     private final int amount;
     private final int duration;
 
+    /**
+     * Full constructor for the Potion class.
+     *
+     * @param name        The name of the potion.
+     * @param description A brief description of what the potion does.
+     * @param duration    How long the potion's effect lasts.
+     * @param amount      The magnitude of the potion's effect.
+     * @param effect      The type of effect the potion provides.
+     */
     public Potion(String name, String description, int duration, int amount, Effect effect) {
         this.name = name;
         this.duration = duration;
@@ -17,6 +29,14 @@ public class Potion implements UsableItem {
         this.effect = effect;
     }
 
+    /**
+     * Convenience constructor for the Potion class for potions with no duration.
+     *
+     * @param name        The name of the potion.
+     * @param description A brief description of what the potion does.
+     * @param amount      The magnitude of the potion's effect.
+     * @param effect      The type of effect the potion provides.
+     */
     public Potion(String name, String description, int amount, Effect effect) {
         this(name, description, 0, amount, effect);
     }
@@ -40,6 +60,12 @@ public class Potion implements UsableItem {
         return this.description;
     }
 
+    /**
+     * Uses the potion on a specific Pokemon. Depending on the effect of the potion,
+     * it might heal the Pokemon, or increase its defense or attack.
+     *
+     * @param pokemon The Pokemon on which to use the potion.
+     */
     @Override
     public void use(Pokemon pokemon) {
         switch (this.effect) {

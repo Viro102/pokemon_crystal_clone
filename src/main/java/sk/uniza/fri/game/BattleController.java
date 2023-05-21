@@ -7,6 +7,9 @@ import sk.uniza.fri.item.Item;
 import sk.uniza.fri.item.Pokeball;
 import sk.uniza.fri.pokemon.Pokemon;
 
+/**
+ * Class managing combat between the player pokemon and the enemy pokemon.
+ */
 public class BattleController {
     private final Player player;
     private final Pokemon enemyPokemon;
@@ -14,6 +17,12 @@ public class BattleController {
     private int turnCounter;
     private int currentPlayerPartySize;
 
+    /**
+     * Constructs a BattleController object to manage a battle between a Player and an Enemy Pokemon.
+     *
+     * @param player       The player involved in the battle.
+     * @param enemyPokemon The enemy Pokemon involved in the battle.
+     */
     public BattleController(Player player, Pokemon enemyPokemon) {
         this.player = player;
         this.enemyPokemon = enemyPokemon;
@@ -21,6 +30,9 @@ public class BattleController {
         this.selectedPokemon = player.getFirstPokemon();
     }
 
+    /**
+     * Processes the next turn of the battle, including the enemy's turn.
+     */
     public void nextTurn() {
         this.enemyTurn();
         this.turnCounter++;
@@ -32,10 +44,22 @@ public class BattleController {
         this.attack(ability, this.enemyPokemon, this.selectedPokemon);
     }
 
+    /**
+     * Player's Pokemon attacks using the provided Ability.
+     *
+     * @param ability The ability that the player's Pokemon will use to attack.
+     */
     public void attack(Ability ability) {
         this.attack(ability, this.selectedPokemon, this.enemyPokemon);
     }
 
+    /**
+     * Pokemon attacks another Pokemon using a specified Ability.
+     *
+     * @param ability The Ability being used to attack.
+     * @param source  The Pokemon that is using the Ability.
+     * @param target  The Pokemon that is being attacked.
+     */
     public void attack(Ability ability, Pokemon source, Pokemon target) {
         if (!ability.isUnlocked()) {
             System.out.println("Ability is not unlocked!");
@@ -70,10 +94,20 @@ public class BattleController {
         }
     }
 
+    /**
+     * Switches the player's currently selected Pokemon with a new one.
+     *
+     * @param newPokemon The new Pokemon to be selected.
+     */
     public void switchPokemon(Pokemon newPokemon) {
         this.selectedPokemon = newPokemon;
     }
 
+    /**
+     * Checks if the battle has ended. A battle ends if either the enemy Pokemon has fainted, or all the player's Pokemon have fainted.
+     *
+     * @return True if the battle has ended, false otherwise.
+     */
     public boolean checkBattleEnd() {
         if (this.enemyPokemon.hasFainted()) {
             this.selectedPokemon.gainExp(this.enemyPokemon.getLevel() * 5);

@@ -14,6 +14,11 @@ import sk.uniza.fri.item.Pokeball;
 import sk.uniza.fri.item.Potion;
 import sk.uniza.fri.pokemon.Pokedex;
 
+/**
+ * The MainMenuScreen class represents the main menu of the game.
+ * It provides options to play the game, access settings and exit the game.
+ * Upon choosing to play the game, it prompts the player to enter their name and initializes a new game.
+ */
 public class MainMenuScreen implements Screen {
     private final GameClass game;
     private final Skin skin;
@@ -24,6 +29,13 @@ public class MainMenuScreen implements Screen {
     private ButtonGroup<TextButton> buttons;
     private boolean isPlayClicked;
 
+    /**
+     * Constructs a new MainMenuScreen.
+     *
+     * @param game    The main game class
+     * @param skin    The skin for styling
+     * @param pokedex The game's Pokedex
+     */
     public MainMenuScreen(GameClass game, Skin skin, Pokedex pokedex) {
         this.game = game;
         this.skin = skin;
@@ -84,6 +96,11 @@ public class MainMenuScreen implements Screen {
         this.table.add(continueButton).width(300).padTop(10);
     }
 
+    /**
+     * Renders the main menu screen.
+     *
+     * @param delta The time in seconds since the last render
+     */
     @Override
     public void render(float delta) {
         ScreenUtils.clear(0.53f, 0.88f, 1, 1);
@@ -106,11 +123,21 @@ public class MainMenuScreen implements Screen {
         }
     }
 
+    /**
+     * Calls when the screen gets resized.
+     *
+     * @param width  The new width
+     * @param height The new height
+     */
     @Override
     public void resize(int width, int height) {
         this.menu.getViewport().update(width, height, true);
     }
 
+    /**
+     * Disposes of all objects in the MainMenuScreen.
+     * This is called when the MainMenuScreen is no longer needed.
+     */
     @Override
     public void dispose() {
         this.menu.dispose();
@@ -131,6 +158,9 @@ public class MainMenuScreen implements Screen {
         //unused
     }
 
+    /**
+     * Called when the screen is shown.
+     */
     @Override
     public void show() {
         Gdx.input.setInputProcessor(this.menu);

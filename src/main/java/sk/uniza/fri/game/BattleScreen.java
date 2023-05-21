@@ -16,6 +16,9 @@ import sk.uniza.fri.item.Pokeball;
 import sk.uniza.fri.item.UsableItem;
 import sk.uniza.fri.pokemon.Pokemon;
 
+/**
+ * Screen class handling the rendering of the battle.
+ */
 public class BattleScreen implements Screen {
     private final GameScreen gameScreen;
     private final GameClass game;
@@ -27,6 +30,16 @@ public class BattleScreen implements Screen {
     private final BattleController battleController;
 
     //TODO redesign battle screen
+
+    /**
+     * Constructs a new BattleScreen.
+     *
+     * @param game         the main game instance.
+     * @param gameScreen   the screen of the game.
+     * @param skin         the skin to be used for UI elements.
+     * @param player       the player involved in the battle.
+     * @param enemyPokemon the enemy Pokemon involved in the battle.
+     */
     public BattleScreen(GameClass game, GameScreen gameScreen, Skin skin, Player player, Pokemon enemyPokemon) {
         this.gameScreen = gameScreen;
         this.game = game;
@@ -267,6 +280,11 @@ public class BattleScreen implements Screen {
         this.switchMainUI(buttonsTable);
     }
 
+    /**
+     * Renders the screen every frame.
+     *
+     * @param delta the time in seconds since the last render.
+     */
     @Override
     public void render(float delta) {
         ScreenUtils.clear(0.8f, 0.8f, 0.8f, 1);
@@ -286,6 +304,13 @@ public class BattleScreen implements Screen {
         }
     }
 
+    /**
+     * Triggers everytime the screen is resized.
+     * Updates the viewport of the screen.
+     *
+     * @param width  the new width in pixels.
+     * @param height the new height in pixels.
+     */
     @Override
     public void resize(int width, int height) {
         this.uiStage.getViewport().update(width, height, true);
@@ -293,6 +318,17 @@ public class BattleScreen implements Screen {
         this.setPositions();
     }
 
+    /**
+     * Called when this screen becomes the current screen for a game.
+     */
+    @Override
+    public void show() {
+        Gdx.input.setInputProcessor(this.uiStage);
+    }
+
+    /**
+     * Called when the screen should release all resources.
+     */
     @Override
     public void dispose() {
         this.uiStage.dispose();
@@ -312,10 +348,5 @@ public class BattleScreen implements Screen {
     @Override
     public void hide() {
         //unused
-    }
-
-    @Override
-    public void show() {
-        Gdx.input.setInputProcessor(this.uiStage);
     }
 }

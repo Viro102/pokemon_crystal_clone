@@ -13,6 +13,9 @@ import sk.uniza.fri.pokemon.FirePokemon;
 import sk.uniza.fri.pokemon.Pokedex;
 import sk.uniza.fri.pokemon.Pokemon;
 
+/**
+ * Entry point of the game. This class is responsible for creating the game
+ */
 public class GameClass extends Game {
     private Skin skin;
     private Pokedex pokedex;
@@ -37,6 +40,10 @@ public class GameClass extends Game {
         this.player.takeItem(debugPokeball);
     }
 
+    /**
+     * Creates a new game session. This method initializes the skin, Pokedex,
+     * the main menu screen, and settings screen. It also sets the current screen.
+     */
     @Override
     public void create() {
         AbilityLoader abilityLoader = new AbilityLoader();
@@ -52,6 +59,10 @@ public class GameClass extends Game {
         }
     }
 
+    /**
+     * Called when this game is being disposed of. This method disposes
+     * of the main menu screen, settings screen, and skin.
+     */
     @Override
     public void dispose() {
         super.dispose();

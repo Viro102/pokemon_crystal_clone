@@ -2,6 +2,10 @@ package sk.uniza.fri.ability;
 
 import sk.uniza.fri.item.Effect;
 
+/**
+ * Represents an Ability in the game.
+ * An Ability has a name, description, effect, power, duration, level requirement, cooldown, type, and unlock status.
+ */
 public class Ability {
     private final String name;
     private final String description;
@@ -13,10 +17,36 @@ public class Ability {
     private final String type;
     private boolean isUnlocked;
 
+
+    /**
+     * Convenient constructor for an Ability with no effect. isUnlocked is set to false by default.
+     *
+     * @param name             the name of the ability
+     * @param description      the description of the ability
+     * @param type             the type of the ability
+     * @param cooldown         the cooldown of the ability
+     * @param duration         the duration of the ability
+     * @param power            the power of the ability
+     * @param levelRequirement the level requirement of the ability
+     * @param effect           the effect of the ability
+     */
     public Ability(String name, String description, String type, int cooldown, int duration, int power, int levelRequirement, Effect effect) {
         this(name, description, type, cooldown, duration, power, levelRequirement, effect, false);
     }
 
+    /**
+     * Constructs a new Ability with the specified characteristics.
+     *
+     * @param name             the name of the ability
+     * @param description      the description of the ability
+     * @param type             the type of the ability
+     * @param cooldown         the cooldown of the ability
+     * @param duration         the duration of the ability
+     * @param power            the power of the ability
+     * @param levelRequirement the level requirement of the ability
+     * @param effect           the effect of the ability
+     * @param isUnlocked       the unlock status of the ability
+     */
     public Ability(String name, String description, String type, int cooldown, int duration, int power, int levelRequirement, Effect effect, boolean isUnlocked) {
         this.name = name;
         this.description = description;
@@ -29,6 +59,9 @@ public class Ability {
         this.isUnlocked = isUnlocked;
     }
 
+    /**
+     * Copy Constructor for an Ability.
+     */
     public Ability(Ability original) {
         this(original.name, original.description, original.type, original.cooldown, original.duration, original.power, original.levelRequirement, original.effect, original.isUnlocked);
     }

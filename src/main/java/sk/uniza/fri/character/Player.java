@@ -18,7 +18,8 @@ public class Player extends Actor {
     private final Pokedex pokedex;
     private final float speed;
     private final TextureAtlas textureAtlas;
-    private final int gold;
+    private int gold;
+    private int collectedPokemons;
 
     public Player(String name, Pokedex pokedex) {
         super();
@@ -29,6 +30,7 @@ public class Player extends Actor {
         this.velocity = new Vector2();
         this.speed = 250;
         this.gold = 0;
+        this.collectedPokemons = 0;
 
         this.setPosition(415, 198);
         this.setWidth(16);
@@ -74,11 +76,7 @@ public class Player extends Actor {
         this.velocity.y = 0;
     }
 
-    // TODO enter pokemon combat
-    public void engage() {
-    }
-
-    // TODO party management
+    // TODO party management, inventory system, trading system
     public void addPokemonToParty(Pokemon pokemon) {
         this.party.addPokemon(pokemon);
     }
@@ -99,12 +97,14 @@ public class Player extends Actor {
         return this.inventory.getSize();
     }
 
-    public void useItem(UsableItem item, String pokemon) {
+    public void useItem(UsableItem item, Pokemon pokemon) {
         item.use(this.party.getPokemon(pokemon));
+        this.inventory.removeItem(item);
     }
 
     public void collectPokemon(Pokemon pokemon) {
         this.pokedex.getPokemon(pokemon.getName()).setCollected(true);
+        this.collectedPokemons++;
     }
 
     public Pokemon getFirstPokemon() {
@@ -115,18 +115,28 @@ public class Player extends Actor {
         return this.gold;
     }
 
+    public void gainGold(int gold) {
+        this.gold += gold;
+    }
+
     public Iterable<Pokemon> getParty() {
         return this.party;
+    }
+
+    public Iterable<Item> getInvetory() {
+        return this.inventory;
     }
 
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("Player: ")
-                .append(this.getName())
+        sb.append("Player: ").append(this.getName())
                 .append(System.lineSeparator())
-                .append("Pokedex = [ ");
-        for (Pokemon pokemon : this.pokedex) {
+                .append("Gold: ").append(this.gold)
+                .append(" Collected Pokemons: ").append(this.collectedPokemons)
+                .append(System.lineSeparator())
+                .append("Party = [ ");
+        for (Pokemon pokemon : this.party) {
             sb.append(pokemon.getName()).append(", ");
         }
         sb.append(" ] ").append(System.lineSeparator());

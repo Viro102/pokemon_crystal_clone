@@ -2,6 +2,7 @@
   {
     "name": "charmander",
     "type": "fire",
+    "tier": 1,
     "baseHP": 100,
     "baseAttack": 10,
     "baseDefense": 10,
@@ -11,6 +12,7 @@
   {
     "name": "charmeleon",
     "type": "fire",
+    "tier": 2,
     "baseHP": 100,
     "baseAttack": 20,
     "baseDefense": 20,
@@ -20,6 +22,7 @@
   {
     "name": "charizard",
     "type": "fire",
+    "tier": 3,
     "baseHP": 100,
     "baseAttack": 30,
     "baseDefense": 30,
@@ -29,6 +32,7 @@
   {
     "name": "squirtle",
     "type": "water",
+    "tier": 1,
     "baseHP": 100,
     "baseAttack": 10,
     "baseDefense": 10,
@@ -38,6 +42,7 @@
   {
     "name": "wartortle",
     "type": "water",
+    "tier": 2,
     "baseHP": 100,
     "baseAttack": 20,
     "baseDefense": 20,
@@ -47,6 +52,7 @@
   {
     "name": "blastoise",
     "type": "water",
+    "tier": 3,
     "baseHP": 100,
     "baseAttack": 30,
     "baseDefense": 30,
@@ -56,6 +62,7 @@
   {
     "name": "bulbasaur",
     "type": "grass",
+    "tier": 1,
     "baseHP": 100,
     "baseAttack": 10,
     "baseDefense": 10,
@@ -65,6 +72,7 @@
   {
     "name": "ivysaur",
     "type": "grass",
+    "tier": 2,
     "baseHP": 100,
     "baseAttack": 20,
     "baseDefense": 20,
@@ -74,6 +82,7 @@
   {
     "name": "venusaur",
     "type": "grass",
+    "tier": 3,
     "baseHP": 100,
     "baseAttack": 30,
     "baseDefense": 30,
@@ -83,6 +92,7 @@
   {
     "name": "pikachu",
     "type": "electric",
+    "tier": 1,
     "baseHP": 100,
     "baseAttack": 10,
     "baseDefense": 10,
@@ -92,6 +102,7 @@
   {
     "name": "raichu",
     "type": "electric",
+    "tier": 2,
     "baseHP": 100,
     "baseAttack": 20,
     "baseDefense": 20,
@@ -101,6 +112,7 @@
   {
     "name": "seel",
     "type": "water",
+    "tier": 1,
     "baseHP": 100,
     "baseAttack": 10,
     "baseDefense": 10,
@@ -110,6 +122,7 @@
   {
     "name": "dewgong",
     "type": "ice",
+    "tier": 2,
     "baseHP": 100,
     "baseAttack": 20,
     "baseDefense": 20,
@@ -119,6 +132,7 @@
   {
     "name": "geodude",
     "type": "rock",
+    "tier": 1,
     "baseHP": 100,
     "baseAttack": 10,
     "baseDefense": 10,
@@ -128,6 +142,7 @@
   {
     "name": "graveler",
     "type": "rock",
+    "tier": 2,
     "baseHP": 100,
     "baseAttack": 20,
     "baseDefense": 20,
@@ -137,6 +152,7 @@
   {
     "name": "golem",
     "type": "rock",
+    "tier": 3,
     "baseHP": 100,
     "baseAttack": 30,
     "baseDefense": 30,
@@ -146,6 +162,7 @@
   {
     "name": "cyndaquil",
     "type": "fire",
+    "tier": 1,
     "baseHP": 100,
     "baseAttack": 10,
     "baseDefense": 10,
@@ -155,6 +172,7 @@
   {
     "name": "quilava",
     "type": "fire",
+    "tier": 2,
     "baseHP": 100,
     "baseAttack": 20,
     "baseDefense": 20,
@@ -164,6 +182,7 @@
   {
     "name": "typhlosion",
     "type": "fire",
+    "tier": 3,
     "baseHP": 100,
     "baseAttack": 30,
     "baseDefense": 30,
@@ -173,6 +192,7 @@
   {
     "name": "totodile",
     "type": "water",
+    "tier": 1,
     "baseHP": 100,
     "baseAttack": 10,
     "baseDefense": 10,
@@ -182,6 +202,7 @@
   {
     "name": "croconaw",
     "type": "water",
+    "tier": 2,
     "baseHP": 100,
     "baseAttack": 20,
     "baseDefense": 20,
@@ -191,6 +212,7 @@
   {
     "name": "feraligatr",
     "type": "water",
+    "tier": 3,
     "baseHP": 100,
     "baseAttack": 30,
     "baseDefense": 30,
@@ -200,6 +222,7 @@
   {
     "name": "chikorita",
     "type": "grass",
+    "tier": 1,
     "baseHP": 100,
     "baseAttack": 10,
     "baseDefense": 10,
@@ -209,6 +232,7 @@
   {
     "name": "bayleef",
     "type": "grass",
+    "tier": 2,
     "baseHP": 100,
     "baseAttack": 20,
     "baseDefense": 20,
@@ -218,6 +242,7 @@
   {
     "name": "meganium",
     "type": "grass",
+    "tier": 3,
     "baseHP": 100,
     "baseAttack": 30,
     "baseDefense": 30,
@@ -227,6 +252,7 @@
   {
     "name": "shellder",
     "type": "water",
+    "tier": 1,
     "baseHP": 100,
     "baseAttack": 10,
     "baseDefense": 10,
@@ -236,6 +262,7 @@
   {
     "name": "cloyster",
     "type": "ice",
+    "tier": 2,
     "baseHP": 100,
     "baseAttack": 20,
     "baseDefense": 20,
@@ -245,6 +272,7 @@
   {
     "name": "grimer",
     "type": "poison",
+    "tier": 1,
     "baseHP": 100,
     "baseAttack": 10,
     "baseDefense": 10,
@@ -254,6 +282,7 @@
   {
     "name": "muk",
     "type": "poison",
+    "tier": 2,
     "baseHP": 100,
     "baseAttack": 20,
     "baseDefense": 20,

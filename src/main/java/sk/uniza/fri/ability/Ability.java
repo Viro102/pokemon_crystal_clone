@@ -14,6 +14,10 @@ public class Ability {
     private boolean isUnlocked;
 
     public Ability(String name, String description, String type, int cooldown, int duration, int power, int levelRequirement, Effect effect) {
+        this(name, description, type, cooldown, duration, power, levelRequirement, effect, false);
+    }
+
+    public Ability(String name, String description, String type, int cooldown, int duration, int power, int levelRequirement, Effect effect, boolean isUnlocked) {
         this.name = name;
         this.description = description;
         this.type = type;
@@ -22,15 +26,11 @@ public class Ability {
         this.power = power;
         this.levelRequirement = levelRequirement;
         this.effect = effect;
-        this.isUnlocked = false;
-    }
-
-    public Ability(String name, String description, String type, int power, int levelRequirement, Effect effect) {
-        this(name, description, type, 0, 0, power, levelRequirement, effect);
+        this.isUnlocked = isUnlocked;
     }
 
     public Ability(Ability original) {
-        this(original.name, original.description, original.type, original.cooldown, original.duration, original.power, original.levelRequirement, original.effect);
+        this(original.name, original.description, original.type, original.cooldown, original.duration, original.power, original.levelRequirement, original.effect, original.isUnlocked);
     }
 
     public boolean isUnlocked() {
@@ -83,6 +83,6 @@ public class Ability {
 
     @Override
     public String toString() {
-        return "Skill: " + this.name + " " + this.description + " LVLRQ: " + this.levelRequirement;
+        return "Skill: " + this.name + " " + this.description + " LVLRQ: " + this.levelRequirement + " UNLCKD: " + this.isUnlocked;
     }
 }

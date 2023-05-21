@@ -9,7 +9,10 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import sk.uniza.fri.character.Player;
-import sk.uniza.fri.pokemon.*;
+import sk.uniza.fri.item.Effect;
+import sk.uniza.fri.item.Pokeball;
+import sk.uniza.fri.item.Potion;
+import sk.uniza.fri.pokemon.Pokedex;
 
 public class MainMenuScreen implements Screen {
     private final GameClass game;
@@ -51,6 +54,13 @@ public class MainMenuScreen implements Screen {
         }
     }
 
+    private void starterItemsPlayer(Player player) {
+        player.collectPokemon(this.pokedex.getPokemon("charmander"));
+        player.takeItem(new Potion("Attack potion", "Raises 20 ATT", 20, Effect.BUFF_ATTACK));
+        player.takeItem(new Potion("Heal potion", "Heals 20 HP", 20, Effect.HEAL));
+        player.takeItem(new Pokeball());
+    }
+
     private void createEnterNameDialog() {
         Label welcomeLabel = new Label("Hello, welcome to the world of Johto, please enter your name: ", this.skin);
 
@@ -67,8 +77,8 @@ public class MainMenuScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 Player player = new Player(nameField.getText(), MainMenuScreen.this.pokedex);
-                player.addPokemonToParty(MainMenuScreen.this.pokedex.getPokemon("charmander"));
-                MainMenuScreen.this.game.setScreen(new GameScreen(MainMenuScreen.this.game, MainMenuScreen.this.skin, player, MainMenuScreen.this.pokedex, MainMenuScreen.this.settingsScreen));
+                MainMenuScreen.this.starterItemsPlayer(player);
+                MainMenuScreen.this.game.setScreen(new GameScreen(MainMenuScreen.this.game, MainMenuScreen.this.skin, player, MainMenuScreen.this.pokedex));
             }
         });
         this.table.add(continueButton).width(300).padTop(10);

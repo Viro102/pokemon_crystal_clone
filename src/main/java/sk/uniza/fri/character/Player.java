@@ -67,6 +67,10 @@ public class Player extends Actor {
         this.velocity.x += this.speed;
     }
 
+    public Item getItemFromInventory(String item) {
+        return this.inventory.getItem(item);
+    }
+
 
     public void update(float deltaTime) {
         this.setPosition(this.getX() + this.velocity.x * deltaTime, this.getY());
@@ -104,6 +108,7 @@ public class Player extends Actor {
 
     public void collectPokemon(Pokemon pokemon) {
         this.pokedex.getPokemon(pokemon.getName()).setCollected(true);
+        this.addPokemonToParty(pokemon);
         this.collectedPokemons++;
     }
 
@@ -146,5 +151,9 @@ public class Player extends Actor {
         }
         sb.append(" ] ").append(System.lineSeparator());
         return sb.toString();
+    }
+
+    public int getPartySize() {
+        return this.party.getSize();
     }
 }

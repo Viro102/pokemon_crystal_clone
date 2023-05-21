@@ -30,7 +30,6 @@ public class GameScreen implements Screen {
     private final Pokedex pokedex;
     private final Skin skin;
     private final GameController gameController;
-    private final SettingsScreen settingsScreen;
     private Table debugTable;
     private Stage hudStage;
     private Stage pauseStage;
@@ -42,12 +41,11 @@ public class GameScreen implements Screen {
     private ArrayList<RectangleMapObject> pokemonSpawnAreas;
     private TiledMapRenderer mapRenderer;
 
-    public GameScreen(GameClass game, Skin skin, Player player, Pokedex pokedex, SettingsScreen settingsScreen) {
+    public GameScreen(GameClass game, Skin skin, Player player, Pokedex pokedex) {
         this.game = game;
         this.skin = skin;
         this.player = player;
         this.pokedex = pokedex;
-        this.settingsScreen = settingsScreen;
         this.gameController = new GameController(this.player, this);
         this.environmentStage = new Stage(new FitViewport(MAP_SIZE, MAP_SIZE));
 
@@ -70,13 +68,13 @@ public class GameScreen implements Screen {
         Table table = new Table();
         table.setFillParent(true);
         table.top().left();
-        table.defaults().pad(5).size(300, 20);
+        table.defaults().pad(5);
 
         if (Constants.DEBUG) {
             this.debugTable = new Table();
             this.debugTable.setFillParent(true);
             this.debugTable.left();
-            this.debugTable.defaults().pad(5).size(300, 20);
+            this.debugTable.defaults().pad(5);
             for (Pokemon pokemon : this.player.getParty()) {
                 Label label = new Label(pokemon.toString(), this.skin);
                 label.setName(pokemon.getName());
@@ -85,14 +83,10 @@ public class GameScreen implements Screen {
             this.hudStage.addActor(this.debugTable);
         }
 
-        Label goldLabel = new Label("Gold: " + this.player.getGold(), this.skin);
-        goldLabel.setName("gold");
+        Label playerLabel = new Label(this.player.toString(), this.skin);
+        playerLabel.setName("player");
 
-        Label partyStrengthLabel = new Label("Party strength: " + this.player.getPartyStrength(), this.skin);
-        partyStrengthLabel.setName("partyStrength");
-
-        table.add(goldLabel).row();
-        table.add(partyStrengthLabel).row();
+        table.add(playerLabel).row();
         this.hudStage.addActor(table);
     }
 
@@ -104,10 +98,8 @@ public class GameScreen implements Screen {
             }
         }
 
-        Label goldLabel = this.hudStage.getRoot().findActor("gold");
-        goldLabel.setText("Gold: " + this.player.getGold());
-        Label partyStrengthLabel = this.hudStage.getRoot().findActor("partyStrength");
-        partyStrengthLabel.setText("Party strength: " + this.player.getPartyStrength());
+        Label playerLabel = this.hudStage.getRoot().findActor("player");
+        playerLabel.setText(this.player.toString());
     }
 
     private void initZone() {
@@ -201,11 +193,11 @@ public class GameScreen implements Screen {
                 //TODO save the game
             }
         });
+
         optionsButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 //TODO options
-//                GameScreen.this.game.setScreen(GameScreen.this.settingsScreen);
             }
         });
 

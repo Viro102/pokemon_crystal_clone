@@ -90,6 +90,56 @@
     "effect": "none"
   },
   {
+    "name": "Spruce",
+    "description": "A powerful spruce",
+    "type": "grass",
+    "cooldown": 0,
+    "duration": 0,
+    "power": 15,
+    "level": 1,
+    "effect": "none"
+  },
+  {
+    "name": "Vine",
+    "description": "A powerful vine",
+    "type": "grass",
+    "cooldown": 0,
+    "duration": 0,
+    "power": 10,
+    "level": 1,
+    "effect": "none"
+  },
+  {
+    "name": "Frost",
+    "description": "A powerful frost",
+    "type": "ice",
+    "cooldown": 0,
+    "duration": 0,
+    "power": 10,
+    "level": 1,
+    "effect": "none"
+  },
+  {
+    "name": "Throw stone",
+    "description": "A powerful throw stone",
+    "type": "rock",
+    "cooldown": 0,
+    "duration": 0,
+    "power": 10,
+    "level": 1,
+    "effect": "none"
+  },
+  {
+    "name": "Heal",
+    "description": "A powerful heal",
+    "type": "normal",
+    "cooldown": 1,
+    "duration": 0,
+    "power": 10,
+    "level": 1,
+    "effect": "heal"
+  },
+  {
     "name": "Rain",
     "description": "A powerful rain",
     "type": "water",
@@ -130,6 +180,16 @@
     "effect": "none"
   },
   {
+    "name": "Breath of fire",
+    "description": "A powerful breath of fire",
+    "type": "fire",
+    "cooldown": 2,
+    "duration": 1,
+    "power": 15,
+    "level": 2,
+    "effect": "burn"
+  },
+  {
     "name": "Blaze",
     "description": "A powerful blaze",
     "type": "fire",
@@ -140,26 +200,6 @@
     "effect": "burn"
   },
   {
-    "name": "Spruce",
-    "description": "A powerful spruce",
-    "type": "grass",
-    "cooldown": 0,
-    "duration": 0,
-    "power": 15,
-    "level": 1,
-    "effect": "none"
-  },
-  {
-    "name": "Vine",
-    "description": "A powerful vine",
-    "type": "grass",
-    "cooldown": 0,
-    "duration": 0,
-    "power": 10,
-    "level": 1,
-    "effect": "none"
-  },
-  {
     "name": "Entangle",
     "description": "A powerful entangle",
     "type": "grass",
@@ -168,16 +208,6 @@
     "power": 15,
     "level": 2,
     "effect": "entangle"
-  },
-  {
-    "name": "Frost",
-    "description": "A powerful frost",
-    "type": "ice",
-    "cooldown": 0,
-    "duration": 0,
-    "power": 10,
-    "level": 1,
-    "effect": "none"
   },
   {
     "name": "Blizzard",
@@ -230,26 +260,6 @@
     "effect": "poison"
   },
   {
-    "name": "Plague",
-    "description": "A powerful plague",
-    "type": "poison",
-    "cooldown": 2,
-    "duration": 2,
-    "power": 20,
-    "level": 3,
-    "effect": "poison"
-  },
-  {
-    "name": "Throw stone",
-    "description": "A powerful throw stone",
-    "type": "rock",
-    "cooldown": 0,
-    "duration": 0,
-    "power": 10,
-    "level": 1,
-    "effect": "none"
-  },
-  {
     "name": "Hurl rock",
     "description": "A powerful hurl rock",
     "type": "rock",
@@ -270,16 +280,6 @@
     "effect": "buff_defense"
   },
   {
-    "name": "Heal",
-    "description": "A powerful heal",
-    "type": "normal",
-    "cooldown": 1,
-    "duration": 0,
-    "power": 10,
-    "level": 1,
-    "effect": "heal"
-  },
-  {
     "name": "Overtime heal",
     "description": "A powerful overtime heal",
     "type": "normal",
@@ -298,6 +298,16 @@
     "power": 10,
     "level": 2,
     "effect": "buff_attack"
+  },
+  {
+    "name": "Plague",
+    "description": "A powerful plague",
+    "type": "poison",
+    "cooldown": 2,
+    "duration": 2,
+    "power": 20,
+    "level": 3,
+    "effect": "poison"
   },
   {
     "name": "Amok",

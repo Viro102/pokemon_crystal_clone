@@ -18,7 +18,6 @@ public abstract class Pokemon extends Actor {
     private final String evolvesInto;
     private final ArrayList<Effect> statusEffects;
     private final ArrayList<Ability> abilities;
-    private final String type;
     private int tier;
     private int maxHealth;
     private int defense;
@@ -45,7 +44,6 @@ public abstract class Pokemon extends Actor {
         this.experience = 0;
         this.fainted = false;
         this.isCollected = false;
-        this.type = "normal";
 
         this.setName(name);
         this.initSprite();
@@ -104,6 +102,13 @@ public abstract class Pokemon extends Actor {
         if (this.level >= LVL_EVOLUTION_TO_TIER_3 && this.tier == 2 && this.evolvesInto != null) {
             this.evolve();
         }
+
+        for (Ability ability : this.abilities) {
+            if (this.getLevel() >= ability.getLvlReq()) {
+                ability.unlock();
+            }
+        }
+
         this.experience = 0;
         this.setMaxHealth((int) (this.getMaxHealth() + 1 / 50f * this.getMaxHealth()));
         this.attack += 1 / 50f * this.attack;
@@ -122,6 +127,9 @@ public abstract class Pokemon extends Actor {
 
     public void addAbility(Ability ability) {
         if (!this.abilities.contains(ability)) {
+            if (this.getLevel() >= ability.getLvlReq()) {
+                ability.unlock();
+            }
             this.abilities.add(ability);
         }
     }
@@ -192,6 +200,10 @@ public abstract class Pokemon extends Actor {
         return this.fainted;
     }
 
+    public void setFainted(boolean fainted) {
+        this.fainted = fainted;
+    }
+
     public int getDefense() {
         return this.defense;
     }
@@ -234,8 +246,8 @@ public abstract class Pokemon extends Actor {
         return this.abilities;
     }
 
-    public void setCollected(boolean collected) {
-        this.isCollected = collected;
+    public void heal() {
+        this.health = this.maxHealth;
     }
 
     public int[] getStats() {
@@ -261,6 +273,14 @@ public abstract class Pokemon extends Actor {
             this.setDefense(pokemonStats[3]);
             this.setSpeed(pokemonStats[4]);
         }
+    }
+
+    public boolean isCollected() {
+        return this.isCollected;
+    }
+
+    public void setCollected(boolean collected) {
+        this.isCollected = collected;
     }
 
     public int getNumOfAbilities() {

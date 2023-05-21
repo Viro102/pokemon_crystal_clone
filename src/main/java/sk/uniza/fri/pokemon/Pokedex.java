@@ -13,6 +13,8 @@ import java.util.Iterator;
 import java.util.List;
 
 public class Pokedex implements Iterable<Pokemon> {
+    private static final int NUM_OF_ABILITIES = 4;
+    private static final int NUM_OF_STARTER_ABILITIES = 1;
     private final HashMap<String, Pokemon> pokemons;
     private final AbilityLoader abilityLoader;
     private final String[] pokemonNames;
@@ -95,15 +97,30 @@ public class Pokedex implements Iterable<Pokemon> {
                 abilities.add(ability);
             }
         }
+
+        for (Ability ability : this.abilityLoader.getAbilities("normal")) {
+            if (ability.getType().equals("normal")) {
+                abilities.add(ability);
+            }
+        }
         return abilities;
     }
 
     private void addAbilities(Pokemon pokemon) {
         ArrayList<Ability> abilities = (ArrayList<Ability>) this.getRandomAbilities(pokemon.getType());
-        for (int i = 0; i < 4; i++) {
+        int starterAbilities = 0;
+        while (pokemon.getNumOfAbilities() < NUM_OF_ABILITIES) {
             Ability ability = abilities.get(MathUtils.random(abilities.size() - 1));
+            if (starterAbilities < NUM_OF_STARTER_ABILITIES) {
+                if (ability.getLvlReq() == 1 && ability.getType().equals(pokemon.getType())) {
+                    starterAbilities++;
+                } else {
+                    continue;
+                }
+            }
             pokemon.addAbility(ability);
         }
+        System.out.println(pokemon);
     }
 
     public Pokemon getRandomPokemon() {

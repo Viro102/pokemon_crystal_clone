@@ -12,6 +12,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import sk.uniza.fri.ability.Ability;
 import sk.uniza.fri.character.Player;
 import sk.uniza.fri.item.Item;
+import sk.uniza.fri.item.Pokeball;
 import sk.uniza.fri.item.UsableItem;
 import sk.uniza.fri.pokemon.Pokemon;
 
@@ -97,6 +98,9 @@ public class BattleScreen implements Screen {
         TextButton backButton = new TextButton("Back", this.skin);
 
         for (Item item : this.player.getInvetory()) {
+            if (item instanceof Pokeball) {
+                continue;
+            }
             TextButton itemButton = new TextButton(item.getName(), this.skin);
             itemButton.addListener(new ClickListener() {
                 @Override
@@ -121,6 +125,7 @@ public class BattleScreen implements Screen {
     }
 
     private void switchMainUI(Table buttonsTable) {
+        this.pokemonStage.clear();
         buttonsTable.clearChildren();
         buttonsTable.defaults().size(300, 100).pad(2);
         buttonsTable.bottom().right();

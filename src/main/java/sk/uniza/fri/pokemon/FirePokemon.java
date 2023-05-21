@@ -16,11 +16,9 @@ public class FirePokemon extends Pokemon {
 
     @Override
     public double getEffectiveness(Pokemon otherPokemon) {
-        if (otherPokemon instanceof WaterPokemon) {
+        if (otherPokemon instanceof WaterPokemon || otherPokemon instanceof FirePokemon) {
             return 0.5;
-        } else if (otherPokemon instanceof GrassPokemon
-                || otherPokemon instanceof IcePokemon
-                || otherPokemon instanceof FirePokemon) {
+        } else if (otherPokemon instanceof GrassPokemon || otherPokemon instanceof IcePokemon) {
             return 2;
         } else {
             return 1;

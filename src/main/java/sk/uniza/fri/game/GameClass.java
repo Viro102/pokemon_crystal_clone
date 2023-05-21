@@ -4,33 +4,59 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import sk.uniza.fri.ability.AbilityLoader;
 import sk.uniza.fri.character.Player;
-import sk.uniza.fri.pokemon.ElectricPokemon;
+import sk.uniza.fri.item.Effect;
+import sk.uniza.fri.item.Pokeball;
+import sk.uniza.fri.item.Potion;
 import sk.uniza.fri.pokemon.FirePokemon;
-import sk.uniza.fri.pokemon.GrassPokemon;
-import sk.uniza.fri.pokemon.PoisonPokemon;
 import sk.uniza.fri.pokemon.Pokedex;
-import sk.uniza.fri.pokemon.RockPokemon;
-import sk.uniza.fri.pokemon.WaterPokemon;
+import sk.uniza.fri.pokemon.Pokemon;
 
 public class GameClass extends Game {
+    private Skin skin;
+    private Pokedex pokedex;
+    private MainMenuScreen mainMenuScreen;
+    private SettingsScreen settingsScreen;
+    private Player player;
+
+    private void testGame() {
+        this.player = new Player("Player", this.pokedex);
+        Pokemon debugFirePokemon = new FirePokemon("charizard", 3, 300, 10, 10, 10, null);
+        Pokemon debugWaterPokemon = this.pokedex.getPokemon("squirtle");
+        this.player.collectPokemon(debugFirePokemon);
+        this.player.collectPokemon(debugWaterPokemon);
+        for (int i = 0; i < 5; i++) {
+            debugFirePokemon.levelUp();
+        }
+        Pokeball debugPokeball = new Pokeball();
+        Potion debugHPPotion = new Potion("Heal potion", "Heals 20 HP", 20, Effect.HEAL);
+        Potion debugATTPotion = new Potion("Attack potion", "Raises 20 ATT", 20, Effect.BUFF_ATTACK);
+        this.player.takeItem(debugHPPotion);
+        this.player.takeItem(debugATTPotion);
+        this.player.takeItem(debugPokeball);
+    }
+
     @Override
     public void create() {
-        Skin skin = new Skin(Gdx.files.internal("skin\\skin.json"), new TextureAtlas("skin\\skin.atlas"));
-        Pokedex pokedex = new Pokedex();
-        MainMenuScreen mainMenuScreen = new MainMenuScreen(this, skin, pokedex);
+        AbilityLoader abilityLoader = new AbilityLoader();
+        this.pokedex = new Pokedex(abilityLoader);
+        this.skin = new Skin(Gdx.files.internal("skin\\skin.json"), new TextureAtlas("skin\\skin.atlas"));
+        this.mainMenuScreen = new MainMenuScreen(this, this.skin, this.pokedex);
+        this.settingsScreen = new SettingsScreen(this, this.skin, this.mainMenuScreen);
         if (Constants.DEBUG) {
-            Player player = new Player("Player", pokedex);
-            SettingsScreen settingsScreen = new SettingsScreen(this, skin, mainMenuScreen);
-            player.addPokemonToParty(new WaterPokemon("totodile", 100, 10, 15, 15));
-            player.addPokemonToParty(new FirePokemon("charmander", 80, 15, 10, 15));
-            player.addPokemonToParty(new GrassPokemon("chikorita", 100, 10, 20, 10));
-            player.addPokemonToParty(new ElectricPokemon("pikachu", 70, 20, 10, 20));
-            player.addPokemonToParty(new PoisonPokemon("grimer", 100, 30, 5, 5));
-            player.addPokemonToParty(new RockPokemon("geodude", 120, 10, 20, 10));
-            this.setScreen(new GameScreen(this, skin, player, pokedex, settingsScreen));
+            this.testGame();
+            this.setScreen(new GameScreen(this, this.skin, this.player, this.pokedex));
         } else {
-            this.setScreen(mainMenuScreen);
+            this.setScreen(this.mainMenuScreen);
         }
+    }
+
+    @Override
+    public void dispose() {
+        super.dispose();
+        this.mainMenuScreen.dispose();
+        this.settingsScreen.dispose();
+        this.skin.dispose();
     }
 }

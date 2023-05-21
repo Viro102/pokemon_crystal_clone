@@ -20,7 +20,7 @@ public class Party implements Iterable<Pokemon> {
 
     public void addPokemon(Pokemon pokemon) {
         if (this.size >= MAX_PARTY_SIZE) {
-            throw new IllegalStateException("Party is full");
+            System.out.println("Party is full");
         }
         this.pokemons.add(pokemon);
         this.size++;
@@ -58,7 +58,7 @@ public class Party implements Iterable<Pokemon> {
     public int getSize() {
         return this.size;
     }
-    
+
     public Pokemon getPokemon(Pokemon pokemon) {
         return this.pokemons.get(this.pokemons.indexOf(pokemon));
     }

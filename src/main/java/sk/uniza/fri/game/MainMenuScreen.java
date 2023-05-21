@@ -29,6 +29,7 @@ public class MainMenuScreen implements Screen {
         this.settingsScreen = new SettingsScreen(this.game, this.skin, this);
 
         this.table = new Table();
+        this.table.defaults().uniform().fill().pad(2);
         this.createButtons();
         this.menu = new Stage(new ScreenViewport());
         this.menu.addActor(this.table);
@@ -39,38 +40,38 @@ public class MainMenuScreen implements Screen {
     private void createButtons() {
         this.table.setFillParent(true);
 
-        TextButton playButton = new TextButton("Play the game", this.skin);
+        TextButton playButton = new TextButton("Play", this.skin);
         TextButton settingsButton = new TextButton("Settings", this.skin);
-        TextButton exitButton = new TextButton("Exit the game", this.skin);
+        TextButton exitButton = new TextButton("Exit", this.skin);
         this.buttons = new ButtonGroup<>(playButton, settingsButton, exitButton);
 
         for (TextButton button : this.buttons.getButtons()) {
-            this.table.add(button).width(200);
-            this.table.row().uniform();
+            this.table.add(button).size(250, 100).pad(2);
+            this.table.row();
         }
     }
 
     private void createEnterNameDialog() {
-        Label welcomeLabel = new Label("Hello, welcome to the world of Johto\n, please enter your name: ", this.skin);
+        Label welcomeLabel = new Label("Hello, welcome to the world of Johto, please enter your name: ", this.skin);
 
         this.table.add(welcomeLabel);
-        this.table.row().uniform();
+        this.table.row();
 
         TextField nameField = new TextField("", this.skin);
         nameField.setMessageText("Enter your name");
-        this.table.add(nameField).width(200);
-        this.table.row().uniform();
+        this.table.add(nameField).width(500);
+        this.table.row();
 
         TextButton continueButton = new TextButton("Continue", this.skin);
         continueButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 Player player = new Player(nameField.getText(), MainMenuScreen.this.pokedex);
-                player.addPokemonToParty(new WaterPokemon("totodile", 100, 10, 10, 10));
+                player.addPokemonToParty(MainMenuScreen.this.pokedex.getPokemon("charmander"));
                 MainMenuScreen.this.game.setScreen(new GameScreen(MainMenuScreen.this.game, MainMenuScreen.this.skin, player, MainMenuScreen.this.pokedex, MainMenuScreen.this.settingsScreen));
             }
         });
-        this.table.add(continueButton).width(200);
+        this.table.add(continueButton).width(300).padTop(10);
     }
 
     @Override
@@ -103,19 +104,21 @@ public class MainMenuScreen implements Screen {
     @Override
     public void dispose() {
         this.menu.dispose();
-        this.skin.dispose();
     }
 
     @Override
     public void pause() {
+        //unused
     }
 
     @Override
     public void resume() {
+        //unused
     }
 
     @Override
     public void hide() {
+        //unused
     }
 
     @Override

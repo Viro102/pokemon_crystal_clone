@@ -14,19 +14,18 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 public class SettingsScreen implements Screen {
     private final MainMenuScreen mainMenu;
-    private final Skin skin;
     private final GameClass game;
     private final Stage stage;
 
+    //TODO implement settings screen
     public SettingsScreen(GameClass game, Skin skin, MainMenuScreen mainMenu) {
         this.game = game;
         this.mainMenu = mainMenu;
-        this.skin = skin;
 
-        TextButton back = new TextButton("Back", this.skin);
-        Slider slider = new Slider(0f, 100f, 1f, false, this.skin);
+        TextButton back = new TextButton("Back", skin);
+        Slider slider = new Slider(0f, 100f, 1f, false, skin);
         this.stage = new Stage(new ScreenViewport());
-        Table table = new Table(this.skin);
+        Table table = new Table(skin);
 
 
         back.addListener(new ClickListener() {
@@ -63,19 +62,21 @@ public class SettingsScreen implements Screen {
 
     @Override
     public void pause() {
+        //unused
     }
 
     @Override
     public void resume() {
+        //unused
     }
 
     @Override
     public void hide() {
+        //unused
     }
 
     @Override
     public void dispose() {
-        this.skin.dispose();
         this.stage.dispose();
     }
 }

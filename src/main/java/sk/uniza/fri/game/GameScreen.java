@@ -11,12 +11,8 @@ import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.badlogic.gdx.scenes.scene2d.ui.ButtonGroup;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
@@ -24,7 +20,10 @@ import sk.uniza.fri.character.Player;
 import sk.uniza.fri.pokemon.Pokedex;
 import sk.uniza.fri.pokemon.Pokemon;
 
+import java.util.ArrayList;
+
 public class GameScreen implements Screen {
+    private static final int MAP_SIZE = 48 * 16;
     private final GameClass game;
     private final Stage environmentStage;
     private final Player player;
@@ -32,13 +31,15 @@ public class GameScreen implements Screen {
     private final Skin skin;
     private final GameController gameController;
     private final SettingsScreen settingsScreen;
+    private Table debugTable;
+    private Stage hudStage;
     private Stage pauseStage;
     private boolean isPaused;
     private Zone zone;
     private String currentZone;
-    private Array<RectangleMapObject> collisionObjects;
-    private Array<RectangleMapObject> exitHitboxes;
-    private Array<RectangleMapObject> pokemonSpawnAreas;
+    private ArrayList<RectangleMapObject> collisionObjects;
+    private ArrayList<RectangleMapObject> exitHitboxes;
+    private ArrayList<RectangleMapObject> pokemonSpawnAreas;
     private TiledMapRenderer mapRenderer;
 
     public GameScreen(GameClass game, Skin skin, Player player, Pokedex pokedex, SettingsScreen settingsScreen) {
@@ -48,9 +49,9 @@ public class GameScreen implements Screen {
         this.pokedex = pokedex;
         this.settingsScreen = settingsScreen;
         this.gameController = new GameController(this.player, this);
-        this.environmentStage = new Stage(new FitViewport(Constants.MAP_SIZE, Constants.MAP_SIZE));
+        this.environmentStage = new Stage(new FitViewport(MAP_SIZE, MAP_SIZE));
 
-        this.environmentStage.getCamera().position.set(Constants.MAP_SIZE / 2f, Constants.MAP_SIZE / 2f, 0);
+        this.environmentStage.getCamera().position.set(MAP_SIZE / 2f, MAP_SIZE / 2f, 0);
         this.environmentStage.getCamera().update();
         this.environmentStage.addActor(this.player);
 
@@ -61,9 +62,55 @@ public class GameScreen implements Screen {
         this.mapRenderer = new OrthogonalTiledMapRenderer(this.zone.getTiledMap(), this.environmentStage.getBatch());
 
         this.initZone();
+        this.initHUD();
     }
 
-    public void initZone() {
+    private void initHUD() {
+        this.hudStage = new Stage(new ScreenViewport());
+        Table table = new Table();
+        table.setFillParent(true);
+        table.top().left();
+        table.defaults().pad(5).size(300, 20);
+
+        if (Constants.DEBUG) {
+            this.debugTable = new Table();
+            this.debugTable.setFillParent(true);
+            this.debugTable.left();
+            this.debugTable.defaults().pad(5).size(300, 20);
+            for (Pokemon pokemon : this.player.getParty()) {
+                Label label = new Label(pokemon.toString(), this.skin);
+                label.setName(pokemon.getName());
+                this.debugTable.add(label).row();
+            }
+            this.hudStage.addActor(this.debugTable);
+        }
+
+        Label goldLabel = new Label("Gold: " + this.player.getGold(), this.skin);
+        goldLabel.setName("gold");
+
+        Label partyStrengthLabel = new Label("Party strength: " + this.player.getPartyStrength(), this.skin);
+        partyStrengthLabel.setName("partyStrength");
+
+        table.add(goldLabel).row();
+        table.add(partyStrengthLabel).row();
+        this.hudStage.addActor(table);
+    }
+
+    private void updateHUD() {
+        if (Constants.DEBUG) {
+            for (Pokemon pokemon : this.player.getParty()) {
+                Label label = this.debugTable.findActor(pokemon.getName());
+                label.setText(pokemon.toString());
+            }
+        }
+
+        Label goldLabel = this.hudStage.getRoot().findActor("gold");
+        goldLabel.setText("Gold: " + this.player.getGold());
+        Label partyStrengthLabel = this.hudStage.getRoot().findActor("partyStrength");
+        partyStrengthLabel.setText("Party strength: " + this.player.getPartyStrength());
+    }
+
+    private void initZone() {
         if (this.collisionObjects != null) {
             this.collisionObjects.clear();
         }
@@ -74,9 +121,9 @@ public class GameScreen implements Screen {
             this.pokemonSpawnAreas.clear();
         }
 
-        this.collisionObjects = this.zone.getCollisionObjects();
-        this.pokemonSpawnAreas = this.zone.getPokemonSpawnAreas();
-        this.exitHitboxes = this.zone.getExitHitboxes();
+        this.collisionObjects = (ArrayList<RectangleMapObject>) this.zone.getCollisionObjects();
+        this.pokemonSpawnAreas = (ArrayList<RectangleMapObject>) this.zone.getPokemonSpawnAreas();
+        this.exitHitboxes = (ArrayList<RectangleMapObject>) this.zone.getExitHitboxes();
     }
 
     public void switchZone(String nextZone) {
@@ -94,6 +141,7 @@ public class GameScreen implements Screen {
 
         this.zone.getPokemons().keySet().forEach(this.environmentStage::addActor);
 
+        //TODO refactor this to be more generic
         if (this.currentZone.equals("starter_forest") && prevZone.equals("starter_town")) {
             this.player.setPosition(55, 462);
         }
@@ -108,6 +156,7 @@ public class GameScreen implements Screen {
         this.pauseStage = new Stage(new ScreenViewport());
         Table pauseTable = new Table();
         pauseTable.setFillParent(true);
+        pauseTable.defaults().uniform().pad(2).size(200, 50);
         this.pauseStage.addActor(pauseTable);
 
         TextButton pokedexButton = new TextButton("Pokedex", this.skin);
@@ -155,7 +204,8 @@ public class GameScreen implements Screen {
         optionsButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                GameScreen.this.game.setScreen(GameScreen.this.settingsScreen);
+                //TODO options
+//                GameScreen.this.game.setScreen(GameScreen.this.settingsScreen);
             }
         });
 
@@ -169,8 +219,8 @@ public class GameScreen implements Screen {
         ButtonGroup<TextButton> buttonGroup = new ButtonGroup<>(pokedexButton, pokemonButton, bagButton, playerButton, saveButton, optionsButton, exitButton);
 
         for (TextButton button : buttonGroup.getButtons()) {
-            pauseTable.add(button).width(200);
-            pauseTable.row().uniform();
+            pauseTable.add(button);
+            pauseTable.row();
         }
 
         pauseTable.setPosition(0, Gdx.graphics.getHeight());
@@ -193,7 +243,7 @@ public class GameScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        ScreenUtils.clear(0, 0, 0, 1);
+        ScreenUtils.clear(0.54f, 1, 0.61f, 1);
 
         this.gameController.handleInput();
         this.gameController.checkCollisions(delta, this.collisionObjects, this.exitHitboxes, this.zone.getPokemons());
@@ -209,6 +259,11 @@ public class GameScreen implements Screen {
         this.environmentStage.act(delta);
         this.environmentStage.draw();
 
+        this.updateHUD();
+        this.hudStage.getViewport().apply();
+        this.hudStage.act(delta);
+        this.hudStage.draw();
+
         if (this.isPaused) {
             this.pauseStage.getViewport().apply();
             this.pauseStage.act(delta);
@@ -222,13 +277,13 @@ public class GameScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
+        this.hudStage.getViewport().update(width, height, true);
         this.environmentStage.getViewport().update(width, height, true);
     }
 
     @Override
     public void dispose() {
         this.environmentStage.dispose();
-        this.skin.dispose();
     }
 
     @Override

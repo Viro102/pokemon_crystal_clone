@@ -1,6 +1,7 @@
 package sk.uniza.fri.game;
 
 import com.badlogic.gdx.maps.MapLayer;
+import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
@@ -12,34 +13,43 @@ import sk.uniza.fri.character.Player;
 import sk.uniza.fri.pokemon.Pokedex;
 import sk.uniza.fri.pokemon.Pokemon;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class Zone {
     private final TiledMap tiledMap;
     private final String mapName;
-    private final Array<RectangleMapObject> collisionObjects;
-    private final Array<RectangleMapObject> exitHitboxes;
-    private final Array<RectangleMapObject> pokemonSpawnAreas;
-    private final Array<Pokemon> pokemons;
+    private final ArrayList<RectangleMapObject> collisionObjects;
+    private final ArrayList<RectangleMapObject> exitHitboxes;
+    private final ArrayList<RectangleMapObject> pokemonSpawnAreas;
+    private final ArrayList<Pokemon> pokemons;
 
     public Zone(String mapName, Player player, Pokedex pokedex) {
         this.mapName = mapName;
         this.tiledMap = new TmxMapLoader().load("tmx/" + this.mapName + ".tmx");
-        this.pokemons = new Array<>();
+        this.pokemons = new ArrayList<>();
+        this.collisionObjects = new ArrayList<>();
+        this.exitHitboxes = new ArrayList<>();
+        this.pokemonSpawnAreas = new ArrayList<>();
 
         MapLayer collisionLayer = this.tiledMap.getLayers().get("Collision");
-        this.collisionObjects = collisionLayer.getObjects().getByType(RectangleMapObject.class);
+        for (MapObject object : collisionLayer.getObjects()) {
+            this.collisionObjects.add((RectangleMapObject) object);
+        }
+//        this.collisionObjects = collisionLayer.getObjects().getByType(RectangleMapObject.class);
 
         MapLayer exits = this.tiledMap.getLayers().get("Exits");
-        this.exitHitboxes = exits.getObjects().getByType(RectangleMapObject.class);
+        for (MapObject object : exits.getObjects()) {
+            this.exitHitboxes.add((RectangleMapObject) object);
+        }
+//        this.exitHitboxes = exits.getObjects().getByType(RectangleMapObject.class);
 
         if (this.tiledMap.getLayers().get("Pokemons") != null) {
             MapLayer pokemonLayer = this.tiledMap.getLayers().get("Pokemons");
-            this.pokemonSpawnAreas = pokemonLayer.getObjects().getByType(RectangleMapObject.class);
+            for (MapObject object : pokemonLayer.getObjects()) {
+                this.pokemonSpawnAreas.add((RectangleMapObject) object);
+            }
+//            this.pokemonSpawnAreas = pokemonLayer.getObjects().getByType(RectangleMapObject.class);
             this.spawnPokemons(player, pokedex);
-        } else {
-            this.pokemonSpawnAreas = new Array<>();
         }
     }
 
@@ -87,7 +97,7 @@ public class Zone {
         // first stat is always level
         for (int i = 0; i < pokemonStats.length; i++) {
             if (i == 0) {
-                pokemonStats[i] += MathUtils.random(player.getMaxLvlOfParty(), player.getMaxLvlOfParty() + 2);
+                pokemonStats[i] = MathUtils.random(player.getMaxLvlOfParty() - 2, player.getMaxLvlOfParty() + 2);
                 continue;
             }
             pokemonStats[i] += MathUtils.random(playerPartyPower / 5 - 2, playerPartyPower / 5 + 2);
@@ -97,16 +107,16 @@ public class Zone {
         return pokemon;
     }
 
-    public Array<RectangleMapObject> getPokemonSpawnAreas() {
-        return this.pokemonSpawnAreas;
+    public List<RectangleMapObject> getPokemonSpawnAreas() {
+        return new ArrayList<>(this.pokemonSpawnAreas);
     }
 
-    public Array<RectangleMapObject> getCollisionObjects() {
-        return this.collisionObjects;
+    public List<RectangleMapObject> getCollisionObjects() {
+        return new ArrayList<>(this.collisionObjects);
     }
 
-    public Array<RectangleMapObject> getExitHitboxes() {
-        return this.exitHitboxes;
+    public List<RectangleMapObject> getExitHitboxes() {
+        return new ArrayList<>(this.exitHitboxes);
     }
 
     public Map<Pokemon, Rectangle> getPokemons() {
@@ -116,7 +126,7 @@ public class Zone {
             pokemonHitbox.put(pokemon, new Rectangle(pokemon.getX(), pokemon.getY(), pokemon.getWidth(), pokemon.getHeight()));
         }
 
-        return pokemonHitbox;
+        return Collections.unmodifiableMap(pokemonHitbox);
     }
 
     public String getMapName() {

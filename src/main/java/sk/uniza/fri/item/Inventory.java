@@ -22,6 +22,10 @@ public class Inventory implements Iterable<Item> {
         this.items.remove(name);
     }
 
+    public void removeItem(Item item) {
+        this.items.remove(item.getName());
+    }
+
     public int getSize() {
         return this.items.size();
     }

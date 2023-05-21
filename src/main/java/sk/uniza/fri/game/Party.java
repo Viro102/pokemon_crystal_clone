@@ -58,20 +58,9 @@ public class Party implements Iterable<Pokemon> {
     public int getSize() {
         return this.size;
     }
-
-    @Null
-    public Pokemon getPokemon(String pokemon) {
-        for (Pokemon p : this.pokemons) {
-            if (p.getName().equals(pokemon)) {
-                return p;
-            }
-        }
-        return null;
-    }
-
-    @Override
-    public Iterator<Pokemon> iterator() {
-        return this.pokemons.iterator();
+    
+    public Pokemon getPokemon(Pokemon pokemon) {
+        return this.pokemons.get(this.pokemons.indexOf(pokemon));
     }
 
     @Null
@@ -81,5 +70,10 @@ public class Party implements Iterable<Pokemon> {
         } else {
             return this.pokemons.get(0);
         }
+    }
+
+    @Override
+    public Iterator<Pokemon> iterator() {
+        return this.pokemons.iterator();
     }
 }

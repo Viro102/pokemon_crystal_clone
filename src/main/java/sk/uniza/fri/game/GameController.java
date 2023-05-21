@@ -4,10 +4,10 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.utils.Array;
 import sk.uniza.fri.character.Player;
 import sk.uniza.fri.pokemon.Pokemon;
 
+import java.util.List;
 import java.util.Map;
 
 public class GameController {
@@ -33,7 +33,7 @@ public class GameController {
             this.player.moveRight();
         }
 
-        if (Gdx.input.isKeyJustPressed(Input.Keys.X)) {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.X) && Constants.DEBUG) {
             System.out.println("X: " + this.player.getX() + ", Y: " + this.player.getY());
         }
 
@@ -46,7 +46,7 @@ public class GameController {
         }
     }
 
-    public void checkCollisions(float delta, Array<RectangleMapObject> collisionObjects, Array<RectangleMapObject> exits, Map<Pokemon, Rectangle> pokemons) {
+    public void checkCollisions(float delta, List<RectangleMapObject> collisionObjects, List<RectangleMapObject> exits, Map<Pokemon, Rectangle> pokemons) {
         Rectangle futureX = new Rectangle(this.player.getX() + this.player.getVelocity().x * delta, this.player.getY(), this.player.getWidth(), this.player.getHeight());
         Rectangle futureY = new Rectangle(this.player.getX(), this.player.getY() + this.player.getVelocity().y * delta, this.player.getWidth(), this.player.getHeight());
         Rectangle current = new Rectangle(this.player.getX(), this.player.getY(), this.player.getWidth(), this.player.getHeight());
